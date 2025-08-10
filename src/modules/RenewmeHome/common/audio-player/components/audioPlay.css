@@ -10,22 +10,26 @@
   border-radius: 4px;
   user-select: none;
   -webkit-user-select: none;
-  background-color: #fff;
   color: #55606e;
 }
+
 .rap-container:focus {
   outline: none;
 }
+
 .rap-container .rap-current-time,
 .rap-container .rap-total-time {
   min-width: 40px;
 }
+
 .rap-container .rap-total-time {
   text-align: right;
 }
+
 .rap-container .rap-pp-button {
   cursor: pointer;
 }
+
 .rap-container .rap-spinner {
   width: 18px;
   height: 18px;
@@ -34,18 +38,21 @@
   background-repeat: no-repeat;
   animation: rapSpin 0.4s linear infinite;
 }
+
 .rap-container .rap-slider {
   flex-grow: 1;
   background-color: #d8d8d8;
   cursor: pointer;
   position: relative;
 }
+
 .rap-container .rap-slider .rap-progress {
   background-color: #007fff;
   border-radius: inherit;
   position: absolute;
   pointer-events: none;
 }
+
 .rap-container .rap-slider .rap-progress .rap-pin {
   height: 16px;
   width: 16px;
@@ -55,6 +62,7 @@
   pointer-events: all;
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.32);
 }
+
 .rap-container .rap-controls {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -66,29 +74,36 @@
   margin-left: 24px;
   margin-right: 24px;
 }
+
 .rap-container .rap-controls .rap-slider {
   margin-left: 12px;
   margin-right: 12px;
   border-radius: 2px;
   height: 4px;
 }
+
 .rap-container .rap-controls .rap-slider .rap-progress {
   width: 0;
   height: 100%;
 }
+
 .rap-container .rap-controls .rap-slider .rap-progress .rap-pin {
   right: -8px;
   top: -6px;
 }
+
 .rap-container .rap-controls span {
   cursor: default;
 }
+
 .rap-container .rap-volume {
   position: relative;
 }
+
 .rap-container .rap-volume .rap-volume-btn {
   cursor: pointer;
 }
+
 .rap-container .rap-volume .rap-volume-controls {
   width: 30px;
   height: 135px;
@@ -102,9 +117,11 @@
   display: flex;
   z-index: 1;
 }
+
 .rap-container .rap-volume .rap-hidden {
   display: none;
 }
+
 .rap-container .rap-volume .rap-vol-placement-top {
   position: absolute;
   left: 0;
@@ -123,11 +140,13 @@
   width: 6px;
   border-radius: 3px;
 }
+
 .rap-container .rap-volume .rap-volume-controls .rap-slider .rap-progress {
   bottom: 0;
   height: 100%;
   width: 6px;
 }
+
 .rap-container .rap-volume .rap-volume-controls .rap-slider .rap-progress .rap-pin {
   left: -5px;
   top: -8px;
@@ -149,6 +168,7 @@
   from {
     transform: rotateZ(0);
   }
+
   to {
     transform: rotateZ(1turn);
   }

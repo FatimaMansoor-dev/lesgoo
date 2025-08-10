@@ -15,11 +15,10 @@ const Subscribed: React.FC<SubscribedProps> = ({
   setIsSubscribedModalOpen,
 }) => {
   return (
-    <Dialog open={isSubscribedModalOpen} onOpenChange={setIsSubscribedModalOpen}>
-      <DialogOverlay className="fixed inset-0 bg-[rgba(0,0,0,0.5)] transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in" />
-
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+    <>
+      {isSubscribedModalOpen && (
+        <Dialog open={isSubscribedModalOpen} onOpenChange={setIsSubscribedModalOpen}>
+          <DialogOverlay className="fixed inset-0 bg-[rgba(0,0,0,0.5)] transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in" />
           <DialogContent className="relative transform overflow-hidden rounded-[20px] bg-[#F8F8F8] transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-[1563px] data-closed:sm:translate-y-0 data-closed:sm:scale-95">
             <div className="bg-[#F8F8F8] px-4 pt-5 pb-4 sm:p-6 sm:pb-4 relative">
               <div className="flex flex-col lg:flex-row items-start justify-between gap-[25px] lg:gap-[20px] 2xl:gap-[32.5px] py-[66px] lg:py-[0px] px-[23px] 2xl:px-[0px] 2xl:pl-[92px] 2xl:pr-[98px] h-full 2xl:h-auto">
@@ -86,9 +85,9 @@ const Subscribed: React.FC<SubscribedProps> = ({
               </div>
             </div>
           </DialogContent>
-        </div>
-      </div>
-    </Dialog>
+        </Dialog>
+      )}
+    </>
   );
 };
 

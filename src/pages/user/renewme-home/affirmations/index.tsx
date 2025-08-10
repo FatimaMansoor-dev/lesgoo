@@ -31,23 +31,21 @@ const Affirmations = () => {
   }, []);
 
   return (
-  <div className="relative min-h-screen">
-    {/* background layer behind all content */}
-    <div
-      className="absolute inset-0 bg-[url('/assets/Renewme-home/Affirmation.png')] bg-cover bg-center bg-fixed -z-10"
-      aria-hidden="true"
-    />
+    <div className="relative min-h-screen">
+      {/* background layer behind all content */}
+      <div
+        className="absolute inset-0 bg-[url('/assets/Renewme-home/Affirmation.png')] bg-cover bg-center bg-fixed -z-10"
+        aria-hidden="true"
+      />
 
-    {/* foreground content */}
-    <Layout>
-      <div className="relative z-10 sm:mt-[48px] mt-[27px] xl:pr-[158px] lg:pr-[44px] lg:px-0 sm:px-[20px] px-[30px] xl:pl-[116px] bg-transparent">
-        <AffirmationsComp data={affirmationsData} swiperRef={swiperRef} user={user} />
-      </div>
-    </Layout>
-  </div>
-);
-
-
+      {/* foreground content */}
+      <Layout>
+        <div className="relative z-10 sm:mt-[48px] mt-[27px] xl:pr-[158px] lg:pr-[44px] lg:px-0 sm:px-[20px] px-[30px] xl:pl-[116px] bg-transparent">
+          <AffirmationsComp data={affirmationsData} swiperRef={swiperRef} user={user} />
+        </div>
+      </Layout>
+    </div>
+  );
 };
 
 export default Affirmations;

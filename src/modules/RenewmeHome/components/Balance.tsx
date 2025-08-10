@@ -1,11 +1,12 @@
+
 import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
 import type { CarouselApi } from 'src/components/ui/carousel';
-import { fetchMeditationAlbums } from 'src/services/meditation-albums-service';
 
+import { fetchMeditationAlbums } from 'src/services/meditation-albums-service';
 import HomeTitle from '../common/HomeTitle';
 import { MeditationAlbum } from '../types';
 
@@ -22,30 +23,32 @@ const Balance = ({ carouselApi }: BalanceProps) => {
       if ('collection' in result) {
         setBalanceData(result.collection);
       }
-      // Pagination can be added here if needed
     }
     fetchData();
   }, []);
 
   return (
+
     <div className="gap-[39px]">
       <HomeTitle text="Balance" link="balance" carouselApi={carouselApi} />
 
-      <div className="mt-[39px]">
-        <div className="grid md:grid-cols-3 grid-cols-2 gap-[34px]">
+
+      <div className="mt-10">
+        {/* Responsive grid: 1 col on xs, 2 cols on sm, 3 cols on md+ */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {balanceData.map((data, index) => (
             <Link href={`/${encodeURIComponent(data.slug)}`} key={index}>
-              <div className="relative w-[368px] h-[267px]">
+              <div className="relative w-full aspect-[16/9]">
                 <Image
                   src={data.coverSmallLandscape}
                   alt={`Balance ${data.title}`}
                   loading="lazy"
                   fill
                   unoptimized
-                  className="md:w-[368px] md:h-[267px] w-auto h-auto rounded-2xl object-cover"
+                  className="rounded-2xl object-cover"
                 />
               </div>
-              <p className="mt-[25px] leading-[29px] xl:text-[24px] lg:text-[20px] md:text-[18px] text-[15px]">
+              <p className="mt-4 leading-snug text-lg sm:text-base md:text-lg lg:text-xl xl:text-2xl">
                 {data.title}
               </p>
             </Link>

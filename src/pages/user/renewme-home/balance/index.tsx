@@ -1,6 +1,6 @@
+import Layout from 'modules/RenewmeHome/layout';
 import { useRef } from 'react';
 import type { Swiper } from 'swiper';
-import Layout from 'modules/RenewmeHome/layout';
 
 import Balance from 'src/modules/RenewmeHome/components/Balance';
 

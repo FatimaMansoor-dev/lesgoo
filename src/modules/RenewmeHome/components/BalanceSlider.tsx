@@ -1,90 +1,77 @@
 import React, { useEffect, useState } from 'react';
-import type { Swiper } from 'swiper';
-import 'swiper/css';
-import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper/types';
+
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { fetchMeditationAlbums } from 'src/services/meditation-albums-service';
-import HomeTitle from 'modules/RenewmeHome/common/HomeTitle';
-import { MeditationAlbum } from 'modules/RenewmeHome/types';
+
+import HomeTitle from '../common/HomeTitle';
+import { MeditationAlbum } from '../types';
 
 interface BalanceSliderProps {
-  swiperRef: React.MutableRefObject<Swiper | null>;
+  swiperRef: React.MutableRefObject<SwiperType | null>;
 }
 
 const BalanceSlider = ({ swiperRef }: BalanceSliderProps) => {
   const [balanceData, setBalanceData] = useState<MeditationAlbum[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const result = await fetchMeditationAlbums('RenewMe', 'Living in Balance', 1, 10);
-        console.log('API result in BalanceSlider:', result);
-
-        if (result && 'collection' in result && Array.isArray(result.collection)) {
-          const validData = result.collection.filter(
-            item => item && typeof item.title === 'string' && item.slug
-          );
-          console.log('Filtered validData in BalanceSlider:', validData);
-          setBalanceData(validData);
-        } else {
-          console.warn('Unexpected API shape in BalanceSlider:', result);
-          setError('Failed to load balance data');
-        }
-      } catch (err) {
-        console.error('Fetch error in BalanceSlider:', err);
-        setError('Failed to load balance data');
-      } finally {
-        setLoading(false);
+      const result = await fetchMeditationAlbums('RenewMe', 'Living in Balance', 1, 10);
+      if ('collection' in result) {
+        setBalanceData(result.collection);
       }
+      // Pagination can be added here if needed
     }
     fetchData();
   }, []);
 
-  const handleSwiper = (swiper: Swiper) => {
-    swiperRef.current = swiper;
-  };
-
-  if (loading) return <div className="text-white">Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
-  if (!balanceData.length) return <div className="text-yellow-400">No Balance items found</div>;
-
   return (
-    <div className="gap-6 px-4 sm:px-6 lg:px-8 -mt-4">
+    <div className="gap-[39px]">
       <HomeTitle text="Balance" link="balance" swiperRef={swiperRef} />
 
-      <div className="mt-6">
-        <SwiperComponent
-          className="mySwiper"
-          style={{ paddingBottom: '20px' }}
-          spaceBetween={20}
-          slidesPerView={3.5}
-          grabCursor={true}
-          breakpoints={{
-            320: { slidesPerView: 1.3 },
-            640: { slidesPerView: 2.2 },
-            1024: { slidesPerView: 3 },
-            1440: { slidesPerView: 4 },
+      <div className="mt-[39px]">
+        <Swiper
+          onSwiper={(swiper: SwiperType) => {
+            swiperRef.current = swiper;
           }}
-          onSwiper={handleSwiper}
+          modules={[Autoplay]}
+          spaceBetween={34}
+          direction="horizontal"
+          slidesPerView={2}
+          autoplay={{
+            delay: 3000,
+          }}
+          breakpoints={{
+            768: { slidesPerView: 2, spaceBetween: 34 },
+            1024: { slidesPerView: 3, spaceBetween: 34 },
+            1440: { slidesPerView: 3, spaceBetween: 34 },
+          }}
+          className="w-full"
         >
           {balanceData.map((data, index) => (
-            <SwiperSlide key={data.slug ?? index} className="w-full">
+            <SwiperSlide key={index}>
               <Link href={`/${encodeURIComponent(data.slug)}`}>
-                <div className="cursor-pointer">
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-800/10 flex items-center justify-center">
-                    <span className="text-white text-sm">Card {index + 1}</span>
-                  </div>
-                  <p className="mt-4 leading-snug text-center xl:text-lg lg:text-base md:text-sm text-xs">
-                    {data.title}
-                  </p>
+                <div className="relative w-full aspect-[368/267]">
+                  <Image
+                    src={data.coverSmallLandscape}
+                    alt={`Balance ${data.title}`}
+                    loading="lazy"
+                    fill
+                    unoptimized
+                    className="rounded-2xl object-cover"
+                  />
                 </div>
+                <p className="mt-[25px] leading-[29px] xl:text-[24px] lg:text-[20px] md:text-[18px] text-[15px] text-white">
+                  {data.title}
+                </p>
               </Link>
             </SwiperSlide>
           ))}
-        </SwiperComponent>
+        </Swiper>
       </div>
     </div>
   );

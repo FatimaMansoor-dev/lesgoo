@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+
 import { fetchTracks } from 'src/services/meditation-albums-service';
-import { TrackItem } from '../types';
+
 import { Play } from 'lucide-react';
+
+import { TrackItem } from '../types';
 
 const Sleep = () => {
   const [sleepData, setSleepData] = useState<TrackItem[]>([]);
@@ -42,9 +45,8 @@ const Sleep = () => {
               {/* Title & Subtitle */}
               <div className="flex flex-col overflow-hidden">
                 <h3 className="text-sm sm:text-base font-medium truncate">
-                  {item.title}
+                  {item.title ?? 'Untitled'}
                 </h3>
-              
               </div>
             </div>
           </div>

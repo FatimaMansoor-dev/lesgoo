@@ -42,7 +42,7 @@ const Music = () => {
   }, []);
 
   return (
-    <div className="bg-[url(/assets/Renewme-home/music.png)] bg-cover bg-center bg-fixed min-h-screen">
+    <div className="bg-[url(/assets/Renewme-home/Music.png)] bg-cover bg-center bg-fixed min-h-screen">
       <Layout>
         <div className="sm:mt-[48px] mt-[27px] xl:pr-[158px] lg:pr-[44px] lg:px-0 sm:px-[20px] px-[30px] xl:pl-[116px]">
           <MusicComp data={musicData} swiperRef={swiperRef} user={user} />

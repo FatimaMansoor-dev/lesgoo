@@ -13,15 +13,10 @@ const Sidebar = () => {
 
       <div>
         <Link
-          href={'/renewme-home'}
+          href={'/user/renewme-home'}
           className="p-[21px_46px] flex items-center justify-start gap-4"
         >
-          <Image
-            src={'/assets/Renewme-home/svg/home.svg'}
-            alt="home"
-            width={54}
-            height={54}
-          />
+          <Image src={'/assets/Renewme-home/svg/home.svg'} alt="home" width={54} height={54} />
           <span className="text-[24px] text-white font-normal text-left">Home</span>
         </Link>
 
@@ -129,16 +124,8 @@ const Sidebar = () => {
           <span className="text-[24px] text-white font-normal text-left">Profile</span>
         </Link>
 
-        <Link
-          href={'/logout'}
-          className="p-[21px_46px] flex items-center justify-start gap-4"
-        >
-          <Image
-            src={'/assets/Renewme-home/svg/logout.svg'}
-            alt="logout"
-            width={54}
-            height={54}
-          />
+        <Link href={'/logout'} className="p-[21px_46px] flex items-center justify-start gap-4">
+          <Image src={'/assets/Renewme-home/svg/logout.svg'} alt="logout" width={54} height={54} />
           <span className="text-[24px] text-white font-normal text-left">Logout</span>
         </Link>
       </div>

@@ -23,7 +23,7 @@ const MeditationComp = ({ data, swiperRef, user }: MeditationCompProps) => {
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
   return (
-    <>
+
       <div className="mt-[32px] sm:mt-[48px] lg:mt-[54px] block w-full">
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-4">
           <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
@@ -41,6 +41,7 @@ const MeditationComp = ({ data, swiperRef, user }: MeditationCompProps) => {
                     setIsSubscriptionModalOpen(true);
                   }}
                 />
+
               </div>
             ))}
           </div>

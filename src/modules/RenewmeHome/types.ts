@@ -1,5 +1,4 @@
-import type { RefObject } from 'react';
-import type { Swiper } from 'swiper';
+import type { CarouselApi } from 'src/components/ui/carousel';
 
 export interface MeditationAlbum {
   __typename?: string;
@@ -33,7 +32,7 @@ export interface MeditationAlbumsResponse {
 export interface HomeTitleProps {
   text: string;
   link: string;
-  swiperRef: RefObject<Swiper | null>;
+  carouselApi?: CarouselApi | null;
 }
 
 export interface Track {

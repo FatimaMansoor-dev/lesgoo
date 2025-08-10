@@ -2,16 +2,16 @@ import Link from 'next/link';
 
 import { HomeTitleProps } from '../types';
 
-const HomeTitle = ({ text, link, swiperRef }: HomeTitleProps) => {
+const HomeTitle = ({ text, link, carouselApi }: HomeTitleProps) => {
   const handlePrev = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slidePrev();
+    if (carouselApi) {
+      carouselApi.scrollPrev();
     }
   };
 
   const handleNext = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slideNext();
+    if (carouselApi) {
+      carouselApi.scrollNext();
     }
   };
 

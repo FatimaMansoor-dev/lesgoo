@@ -64,7 +64,7 @@ const MediationComp = ({ data, swiperRef, user }: MediationCompProps) => {
                       item={item}
                       needControls={false}
                       needVolumes={false}
-                      classNames="slider"
+                      classNames="default"
                       subscriptionStatus={user?.subscriptionStatus || ''}
                       onLock={() => {
                         setIsSubscriptionModalOpen(true);

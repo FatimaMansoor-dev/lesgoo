@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import type { Swiper } from 'swiper';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
+import type { CarouselApi } from 'src/components/ui/carousel';
 import { fetchMeditationAlbums } from 'src/services/meditation-albums-service';
 
 import HomeTitle from '../common/HomeTitle';
 import { MeditationAlbum } from '../types';
 
 interface BalanceProps {
-  swiperRef: React.MutableRefObject<Swiper | null>;
+  carouselApi?: CarouselApi | null;
 }
 
-const Balance = ({ swiperRef }: BalanceProps) => {
+const Balance = ({ carouselApi }: BalanceProps) => {
   const [balanceData, setBalanceData] = useState<MeditationAlbum[]>([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Balance = ({ swiperRef }: BalanceProps) => {
 
   return (
     <div className="gap-[39px]">
-      <HomeTitle text="Balance" link="balance" swiperRef={swiperRef} />
+      <HomeTitle text="Balance" link="balance" carouselApi={carouselApi} />
 
       <div className="mt-[39px]">
         <div className="grid md:grid-cols-3 grid-cols-2 gap-[34px]">

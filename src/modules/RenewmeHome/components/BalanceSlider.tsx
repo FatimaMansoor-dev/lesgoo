@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Autoplay } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import type { Swiper as SwiperType } from 'swiper/types';
+import Autoplay from 'embla-carousel-autoplay';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from 'src/components/ui/carousel';
 import { fetchMeditationAlbums } from 'src/services/meditation-albums-service';
 
 import HomeTitle from '../common/HomeTitle';
 import { MeditationAlbum } from '../types';
 
 interface BalanceSliderProps {
-  swiperRef: React.MutableRefObject<SwiperType | null>;
+  carouselApi?: CarouselApi;
 }
 
-const BalanceSlider = ({ swiperRef }: BalanceSliderProps) => {
+const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
   const [balanceData, setBalanceData] = useState<MeditationAlbum[]>([]);
+  const [api, setApi] = useState<CarouselApi | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,47 +36,44 @@ const BalanceSlider = ({ swiperRef }: BalanceSliderProps) => {
 
   return (
     <div className="gap-[39px]">
-      <HomeTitle text="Balance" link="balance" swiperRef={swiperRef} />
+      <HomeTitle text="Balance" link="balance" carouselApi={api} />
 
       <div className="mt-[39px]">
-        <Swiper
-          onSwiper={(swiper: SwiperType) => {
-            swiperRef.current = swiper;
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: false,
           }}
-          modules={[Autoplay]}
-          spaceBetween={34}
-          direction="horizontal"
-          slidesPerView={2}
-          autoplay={{
-            delay: 3000,
-          }}
-          breakpoints={{
-            768: { slidesPerView: 2, spaceBetween: 34 },
-            1024: { slidesPerView: 3, spaceBetween: 34 },
-            1440: { slidesPerView: 3, spaceBetween: 34 },
-          }}
+          plugins={[
+            Autoplay({
+              delay: 3000,
+            }),
+          ]}
+          setApi={setApi}
           className="w-full"
         >
-          {balanceData.map((data, index) => (
-            <SwiperSlide key={index}>
-              <Link href={`/${encodeURIComponent(data.slug)}`}>
-                <div className="relative w-full aspect-[368/267]">
-                  <Image
-                    src={data.coverSmallLandscape}
-                    alt={`Balance ${data.title}`}
-                    loading="lazy"
-                    fill
-                    unoptimized
-                    className="rounded-2xl object-cover"
-                  />
-                </div>
-                <p className="mt-[25px] leading-[29px] xl:text-[24px] lg:text-[20px] md:text-[18px] text-[15px] text-white">
-                  {data.title}
-                </p>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          <CarouselContent className="-ml-4">
+            {balanceData.map((data, index) => (
+              <CarouselItem key={index} className="pl-4 basis-1/2 md:basis-1/2 lg:basis-1/3">
+                <Link href={`/${encodeURIComponent(data.slug)}`}>
+                  <div className="relative w-full aspect-[368/267]">
+                    <Image
+                      src={data.coverSmallLandscape}
+                      alt={`Balance ${data.title}`}
+                      loading="lazy"
+                      fill
+                      unoptimized
+                      className="rounded-2xl object-cover"
+                    />
+                  </div>
+                  <p className="mt-[25px] leading-[29px] xl:text-[24px] lg:text-[20px] md:text-[18px] text-[15px] text-white">
+                    {data.title}
+                  </p>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </div>
   );

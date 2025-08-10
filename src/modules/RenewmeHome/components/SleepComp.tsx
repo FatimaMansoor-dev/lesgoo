@@ -36,6 +36,7 @@ const SleepComp = ({ data, swiperRef, user }: SleepCompProps) => {
                   item={item}
                   needControls={true}
                   needVolumes={false}
+                  classNames="default"
                   subscriptionStatus={user?.subscriptionStatus || ''}
                   onLock={() => {
                     setIsSubscriptionModalOpen(true);

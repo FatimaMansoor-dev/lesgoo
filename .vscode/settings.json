@@ -1,0 +1,16 @@
+{
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.format.enable": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.lintTask.enable": true,
+  "svg.preview.background": "custom",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+}

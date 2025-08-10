@@ -1,0 +1,65 @@
+import { imageDomainUrl } from 'shared/constants/Assets';
+
+export const FITNESS_FUN_CONTENTS = [
+  {
+    type: 'Nutrition',
+    title:'Nutrition Fun',
+    bgColor: 'bg-[#4F65CC]',
+    bgColorLight: 'bg-[#4F65CC]/10',
+    textColor: 'text-[#4F65CC]',
+    facts: [
+      `Swap sugary drinks for infused water or herbal teas to cut down on empty calories.`,
+      `Try incorporating more leafy greens into your meals for added vitamins and fiber.`,
+      `Practice mindful eating by paying attention to what you eat, savoring each bite, and avoiding distractions like TV or smartphones during meals.`,
+      `Stay hydrated by drinking plenty of water throughout the day, aiming for at least 8 glasses daily, but adjusting based on your activity level and climate.`,
+      `Incorporate a variety of fruits, vegetables, whole grains, lean proteins, and healthy fats into your diet to ensure you receive a broad spectrum of nutrients.`,
+      `Eat regular meals, especially breakfast, to maintain energy levels.`,
+    ],
+    icon: `${imageDomainUrl}/YourBrandSample/Icon/nutrition.svg`,
+  },
+  {
+    type: 'Exercise',
+    title:'Fitness Fun',
+    bgColor: 'bg-[#3744CC]',
+    bgColorLight: 'bg-[#3744CC]/10',
+    textColor: 'text-[#3744CC]',
+    facts: [
+      `Start your day with a quick 10-minute stretching routine to boost circulation and flexibility.`,
+      `Mix cardio and strength training for a well-rounded workout that burns calories and builds muscle.`,
+      `Set achievable fitness goals to stay motivated. Start small and gradually increase the intensity and duration of your workouts.`,
+      `Schedule your workouts in advance and stick to the plan to build a consistent habit.`,
+      `Pay attention to your body's signals. Rest when you're tired and don't push through pain. It's important to allow your body time to recover.`,
+    ],
+    icon: `${imageDomainUrl}/YourBrandSample/Icon/exercise.svg`,
+  },
+  {
+    type: 'General Health',
+    title:'Mindful Fun',
+    bgColor: 'bg-[#A251AB]',
+    bgColorLight: 'bg-[#A251AB]/10',
+    textColor: 'text-[#A251AB]',
+    facts: [
+      `Practice deep breathing exercises for 5 minutes to reduce stress and promote relaxation.`,
+      `Set aside time each day for mindfulness meditation to improve focus and mental clarity.`,
+      `Spend time doing activities you enjoy and that make you feel good. Hobbies can provide a sense of purpose and joy.`,
+      `Keeping your living and work spaces tidy can reduce stress and increase your sense of control. Use planners or apps to help manage tasks and deadlines.`,
+      `Be kind to yourself and avoid self-criticism. Treat yourself with the same compassion you would offer to a friend.`,
+    ],
+    icon: `${imageDomainUrl}/YourBrandSample/Icon/general-health.svg`,
+  },
+  {
+    type: 'Mental Wellness',
+    title:'Wellness Fun',
+    bgColor: 'bg-[#132979]',
+    bgColorLight: 'bg-[#132979]/10',
+    textColor: 'text-[#132979]',
+    facts: [
+      `Establish a consistent sleep schedule to ensure adequate rest and rejuvenation.`,
+      `Stay hydrated by carrying a reusable water bottle and sipping throughout the day.`,
+      `Regular physical activity releases endorphins, which can improve mood and reduce stress. Aim for at least 30 minutes of moderate exercise most days of the week.`,
+      `Routine check-ups and screenings can detect health issues early when they are more treatable.`,
+      `Use sunscreen with at least SPF 30, wear protective clothing, and avoid excessive sun exposure to protect your skin from harmful UV rays.`,
+    ],
+    icon: `${imageDomainUrl}/YourBrandSample/Icon/mental-wellness.svg`,
+  },
+];

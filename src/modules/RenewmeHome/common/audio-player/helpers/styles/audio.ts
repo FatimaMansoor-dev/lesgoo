@@ -56,10 +56,12 @@ export const defaultClass = {
       },
     },
   },
-  rapTexts: {
-    album: 'font-bold text-xs sm:text-xl leading-[18px] sm:leading-[22px] mb-1 min-w-0 break-words', // Decreased the gap
-    title: 'text-xs sm:text-xl text-[#D6D6D6] leading-[16px] sm:leading-[18px] min-w-0 break-words',
-  },
+rapTexts: {
+  album: 'font-bold text-lg sm:text-3xl leading-[30px] sm:leading-[34px] mb-1 min-w-0 break-words',
+  title: 'text-base sm:text-2xl text-[#D6D6D6] leading-[20px] sm:leading-[28px] min-w-0 break-words',
+},
+
+
 };
 
 export const sliderClass = {

@@ -37,7 +37,7 @@ const MeditationComp = ({
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const limit = 10;
+  const limit = 100;
 
   // Compute total pages from totalCount (server) or data length (client)
   const totalPages = useMemo(() => {

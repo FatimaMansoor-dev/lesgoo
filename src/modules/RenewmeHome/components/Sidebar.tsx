@@ -8,7 +8,7 @@ const Sidebar = () => {
       <div className="py-[47px] px-8.5 flex flex-col items-center">
         <Image src={'/assets/Renewme-home/svg/logo.svg'} alt="logo" width={193} height={36} />
         {/* optional textual heading (centered) */}
-        <h2 className="mt-3 text-white text-[18px] font-medium text-center">RenewMe</h2>
+        {/* <h2 className="mt-3 text-white text-[18px] font-medium text-center">RenewMe</h2> */}
       </div>
 
       <div>

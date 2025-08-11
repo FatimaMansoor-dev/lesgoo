@@ -26,7 +26,7 @@ const ConfidenceComp = ({ data = [], swiperRef, user }: ConfidenceCompProps) => 
 
   // Pagination state (client-side)
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const limit = 10;
+  const limit = 100;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil((data?.length ?? 0) / limit)),

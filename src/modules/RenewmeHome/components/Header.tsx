@@ -65,22 +65,22 @@ const Header = () => {
                 <Link href="/home">Home</Link>
               </li>
               <li className="flex items-center justify-between px-6 py-4 hover:bg-white/10">
-                <Link href="/sleep">Sleep</Link>
+                <Link href="/user/renewme-home/sleep">Sleep</Link>
               </li>
               <li className="px-6 py-4 hover:bg-white/10">
-                <Link href="/balance">Living in Balance</Link>
+                <Link href="/user/renewme-home/balance">Living in Balance</Link>
               </li>
               <li className="px-6 py-4 hover:bg-white/10">
-                <Link href="/meditation">Meditation</Link>
+                <Link href="/user/renewme-home/meditation">Meditation</Link>
               </li>
               <li className="flex items-center justify-between px-6 py-4 hover:bg-white/10">
-                <Link href="/affirmations">Affirmations</Link>
+                <Link href="/user/renewme-home/affirmations">Affirmations</Link>
               </li>
               <li className="px-6 py-4 hover:bg-white/10">
-                <Link href="/confidence">Confidence</Link>
+                <Link href="/user/renewme-home/confidence">Confidence</Link>
               </li>
               <li className="px-6 py-4 hover:bg-white/10">
-                <Link href="/music">Music</Link>
+                <Link href="/user/renewme-home/music">Music</Link>
               </li>
               <li className="px-6 py-4 hover:bg-white/10">
                 <Link href="/profile">Profile</Link>

@@ -66,9 +66,10 @@ const Balance = ({ carouselApi }: BalanceProps) => {
                 </div>
               </div>
 
-              <p className="mt-4 text-left text-white text-sm md:text-base leading-snug">
-                {data.title}
-              </p>
+              <p className="mt-4 text-left text-white text-xl md:text-2xl leading-snug">
+  {data.title}
+</p>
+
             </Link>
           ))}
         </div>

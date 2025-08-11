@@ -543,10 +543,10 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
             {/* Text Content */}
             <div className="flex-1 min-w-0">
               <div className={`${currentStyles.rapTexts.album} break-words whitespace-normal`}>
-                {leftTitle}
+                {leftSubtitle}
               </div>
               <div className={`${currentStyles.rapTexts.title} break-words whitespace-normal`}>
-                {leftSubtitle}
+                {leftTitle}
               </div>
             </div>
           </div>

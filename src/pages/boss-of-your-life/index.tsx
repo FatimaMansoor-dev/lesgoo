@@ -182,48 +182,57 @@ const BossOfYourLife = () => {
                     Boss of Your Life
                   </h1>
                   <div className="flex items-center gap-6 text-white/80">
+                      <div className="flex items-center gap-2">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5 text-white/80"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+    <path
+      d="M12 6v6l4 2"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+  <span className="text-sm font-medium">
+    {Math.floor(Number(albumData.totalDuration) / 60)} min{' '}
+    {Number(albumData.totalDuration) % 60} sec
+  </span>
+</div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-sm font-medium">
-                        {Math.floor(Number(albumData.totalDuration) / 60)} min{' '}
-                        {Number(albumData.totalDuration) % 60} sec
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-sm font-medium">{albumData.totalTracks} tracks</span>
-                    </div>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5 text-white"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
+  </svg>
+  <span className="text-sm font-medium">{albumData.totalTracks} tracks</span>
+</div>
                   </div>
                 </div>
 
                 {/* Large play button */}
-                <div className="flex-shrink-0 ml-8">
-                  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-                    <svg
-                      className="w-8 h-8 sm:w-10 sm:h-10 text-blue-900 ml-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
+<div className="flex-shrink-0 ml-8">
+  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+    <svg
+      className="w-8 h-8 sm:w-10 sm:h-10 text-black"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <polygon points="8,5 19,12 8,19" />
+    </svg>
+  </button>
+</div>
               </div>
             </div>
 

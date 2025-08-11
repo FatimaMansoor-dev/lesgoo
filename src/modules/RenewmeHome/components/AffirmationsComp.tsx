@@ -35,7 +35,7 @@ const AffirmationsComp = ({
 
   // Pagination
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const limit = 10;
+  const limit = 100;
 
   const totalPages = useMemo(() => {
     const base = typeof totalCount === 'number' ? totalCount : data.length;

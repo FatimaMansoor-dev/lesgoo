@@ -1,83 +1,63 @@
-import { useEffect, useState } from 'react';
-import { Play } from 'lucide-react';
-import {
-  Carousel,
-  type CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from 'src/components/ui/carousel';
-import { fetchTracks } from 'src/services/meditation-albums-service';
-import HomeTitle from '../common/HomeTitle';
-import { TrackItem } from '../types';
+// MeditationComp.tsx
+import SubscriptionModal from 'modules/Subscription/components/SubscriptionModal';
+import React, { useState } from 'react';
+import { User } from 'src/types/user';
+import Track from '../common/Track';
 
-const Meditation = () => {
-  const [meditationData, setMeditationData] = useState<TrackItem[]>([]);
-  const [api, setApi] = useState<CarouselApi | null>(null);
+interface MeditationCompProps {
+  data: Array<{
+    premium: boolean;
+    preview: string | null;
+    title: string | null;
+    album: {
+      title: string | null;
+    };
+    url?: string;
+  }>;
+  swiperRef?: React.MutableRefObject<any>;
+  user?: User | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      const result = await fetchTracks('RenewMe', 'Meditations', 1, 20);
-      if (result.collection) {
-        setMeditationData(result.collection as TrackItem[]);
-      }
-    }
-    fetchData();
-  }, []);
-
-  // Group into chunks of 6 (3 columns × 2 rows)
-  const chunkedData = [];
-  for (let i = 0; i < meditationData.length; i += 6) {
-    chunkedData.push(meditationData.slice(i, i + 6));
-  }
+const MeditationComp = ({ data, swiperRef, user }: MeditationCompProps) => {
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
   return (
-    <div className="gap-[39px] mt-8">
-      {/* Section Header */}
-      <HomeTitle text="Meditation" link="user/renewme-home/meditation" carouselApi={api} />
+    <>
+      <div className="mt-[32px] sm:mt-[48px] lg:mt-[54px] block w-full">
+        {/* Match Sleep layout: wider outer container, left-aligned heading */}
+        <div className="flex flex-col items-start justify-center w-full max-w-7xl mx-auto px-4">
+          <h1 className="w-full text-left text-2xl sm:text-3xl font-medium tracking-normal text-white mb-6">
+            Meditation
+          </h1>
 
-      {/* Carousel */}
-      <div className="mt-[39px] overflow-hidden">
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: false,
-            dragFree: false,
-          }}
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2 touch-none select-none">
-            {chunkedData.map((group, groupIndex) => (
-              <CarouselItem
-                key={groupIndex}
-                className="pl-2 basis-full lg:basis-full"
+          <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
+            {data.map((item, index) => (
+              <div
+                key={index}
+                className="w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl p-6 sm:p-7 lg:p-8 bg-black/20 backdrop-blur-md shadow-xl border border-white/10 transition-all duration-200 ease-in-out"
               >
-                {/* Grid inside each slide */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {group.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-3 w-full h-24 backdrop-blur-lg bg-black/20 border border-white/20 rounded-xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
-                    >
-                      {/* Play button */}
-                      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition">
-                        <Play size={16} />
-                      </button>
-
-                      {/* Track title */}
-                      <div className="flex flex-col overflow-hidden">
-                        <h3 className="text-sm font-medium truncate">{item.title}</h3>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CarouselItem>
+                <Track
+                  item={item}
+                  needControls={true}
+                  needVolumes={false}
+                  classNames="default"
+                  subscriptionStatus={user?.subscriptionStatus || ''}
+                  onLock={() => {
+                    setIsSubscriptionModalOpen(true);
+                  }}
+                />
+              </div>
             ))}
-          </CarouselContent>
-        </Carousel>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <SubscriptionModal
+        isSubscriptionModalOpen={isSubscriptionModalOpen}
+        setIsSubscriptionModalOpen={setIsSubscriptionModalOpen}
+      />
+    </>
   );
 };
 
-export default Meditation;
+export default MeditationComp;

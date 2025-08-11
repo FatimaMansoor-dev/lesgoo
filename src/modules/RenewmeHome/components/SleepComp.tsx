@@ -25,12 +25,19 @@ const SleepComp = ({ data, swiperRef, user }: SleepCompProps) => {
   return (
     <>
       <div className="mt-[32px] sm:mt-[48px] lg:mt-[54px] block w-full">
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-4">
+        {/* Wider outer container so cards can expand more on large screens */}
+        <div className="flex flex-col items-start justify-center w-full max-w-7xl mx-auto px-4">
+          {/* Left-aligned, simpler heading */}
+          <h1 className="w-full text-left text-2xl sm:text-3xl font-medium tracking-normal text-white mb-6">
+            Sleep
+          </h1>
+
           <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
             {data.map((item, index) => (
               <div
                 key={index}
-                className="w-full max-w-3xl mx-auto rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 bg-black/20 backdrop-blur-md shadow-xl border border-white/10 hover:bg-black/30 hover:border-white/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl"
+                /* Increased card max width; removed hover effects */
+                className="w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl p-6 sm:p-7 lg:p-8 bg-black/20 backdrop-blur-md shadow-xl border border-white/10 transition-all duration-200 ease-in-out"
               >
                 <Track
                   item={item}
@@ -47,6 +54,7 @@ const SleepComp = ({ data, swiperRef, user }: SleepCompProps) => {
           </div>
         </div>
       </div>
+
       <SubscriptionModal
         isSubscriptionModalOpen={isSubscriptionModalOpen}
         setIsSubscriptionModalOpen={setIsSubscriptionModalOpen}

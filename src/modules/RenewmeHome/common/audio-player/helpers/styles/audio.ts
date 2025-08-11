@@ -19,7 +19,7 @@ export const defaultClass = {
         },
         path: {
           fill: 'white',
-          fillRule: 'evenodd',
+          fillRule: 'evenodd' as const,
           d: 'M6.27928 1.22056C3.04554 -0.634362 0.423828 0.885211 0.423828 4.61191V32.1133C0.423828 35.8437 3.04554 37.3613 6.27928 35.5081L30.3169 21.7227C33.5517 19.8672 33.5517 16.8609 30.3169 15.0057L6.27928 1.22056Z',
         },
       },
@@ -36,7 +36,7 @@ export const defaultClass = {
         },
         path: {
           fill: 'white',
-          fillRule: 'evenodd',
+          fillRule: 'evenodd' as const,
           d: 'M34.375 17.3359H33V11.8359C33 5.76929 28.0667 0.835938 22 0.835938C15.9333 0.835938 11 5.76929 11 11.8359V17.3359H9.625C7.35168 17.3359 5.5 19.1856 5.5 21.4609V40.7109C5.5 42.9863 7.35168 44.8359 9.625 44.8359H34.375C36.6483 44.8359 38.5 42.9863 38.5 40.7109V21.4609C38.5 19.1856 36.6483 17.3359 34.375 17.3359ZM14.6668 11.8359C14.6668 7.7915 17.9556 4.50272 22 4.50272C26.0444 4.50272 29.3332 7.7915 29.3332 11.8359V17.3359H14.6668V11.8359Z',
         },
       },
@@ -52,14 +52,14 @@ export const defaultClass = {
         },
         path: {
           fill: 'white',
-          fillRule: 'evenodd',
+          fillRule: 'evenodd' as const,
           d: 'M0 0h6v24H0zM12 0h6v24h-6z',
         },
       },
     },
   },
   rapTexts: {
-    album: 'font-bold sm:text-xl text-sm leading-[22px] sm:mb-5 mb-1',
+    album: 'font-bold sm:text-xl text-sm leading-[22px] mb-1', // Decreased the gap
     title: 'sm:text-xl text-sm text-[#D6D6D6] leading-[14px]',
   },
 };
@@ -151,19 +151,21 @@ export const sliderClass = {
 };
 export const minimal = {
   rapContainer: {
-    main: 'flex items-center rounded-xl bg-black/20 text-white px-4 py-3',
+    main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[24px] sm:py-[24px] py-[21px]',
     main2: 'flex items-center gap-4',
   },
   rapPpButton: {
-    main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center',
+    main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center border border-white/30',
     play: {
       svg: {
-        className: 'w-4 h-4',
+        className: 'w-4 h-6',
         props: {
           width: '16',
           height: '16',
           viewBox: '0 0 16 16',
-          fill: 'white',
+          fill: 'none',
+          stroke: 'white',
+          strokeWidth: '2',
         },
         path: {
           d: 'M3 2L13 8L3 14V2Z',

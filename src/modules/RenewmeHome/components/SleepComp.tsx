@@ -34,22 +34,16 @@ const SleepComp = ({ data, swiperRef, user }: SleepCompProps) => {
 
           <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
             {data.map((item, index) => (
-              <div
-                key={index}
-                /* Increased card max width; removed hover effects */
-                className="w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl p-6 sm:p-7 lg:p-8 bg-black/20 backdrop-blur-md shadow-xl border border-white/10 transition-all duration-200 ease-in-out"
-              >
-                <Track
-                  item={item}
-                  needControls={true}
-                  needVolumes={false}
-                  classNames="default"
-                  subscriptionStatus={user?.subscriptionStatus || ''}
-                  onLock={() => {
-                    setIsSubscriptionModalOpen(true);
-                  }}
-                />
-              </div>
+              <Track
+                item={item}
+                needControls={true}
+                needVolumes={false}
+                classNames="default"
+                subscriptionStatus={user?.subscriptionStatus || ''}
+                onLock={() => {
+                  setIsSubscriptionModalOpen(true);
+                }}
+              />
             ))}
           </div>
         </div>

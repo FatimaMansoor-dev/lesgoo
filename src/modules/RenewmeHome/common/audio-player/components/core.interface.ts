@@ -4,6 +4,7 @@ export interface AudioInterface {
   autoPlay?: boolean;
   className?: string;
   classNames?: string;
+  styleType?: 'default' | 'slider' | 'minimal';
   src: string;
   item?: {
     premium: boolean;

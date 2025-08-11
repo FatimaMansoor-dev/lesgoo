@@ -13,6 +13,7 @@ interface TrackProps {
   needControls?: boolean;
   needVolumes?: boolean;
   classNames?: string;
+  styleType?: 'default' | 'slider' | 'minimal';
   subscriptionStatus?: string;
   onLock?: () => void;
 }
@@ -22,6 +23,7 @@ const Track = ({
   needControls = true,
   needVolumes = true,
   classNames = 'default',
+  styleType = 'default',
   subscriptionStatus = '',
   onLock,
 }: TrackProps) => {
@@ -29,6 +31,7 @@ const Track = ({
     <AudioPlayer
       src={item?.url || ''}
       item={item}
+      styleType={styleType}
       needControls={needControls}
       needVolumes={needVolumes}
       classNames={classNames}

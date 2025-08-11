@@ -3,6 +3,7 @@ import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } f
 
 import { AudioInterface, AudioPlayerRef } from './audio-player/components/core.interface';
 import { iconPaths } from './audio-player/helpers/icons/icons';
+import { defaultClass, minimal, sliderClass } from './audio-player/helpers/styles/audio';
 import { formatTime } from './audio-player/helpers/utils/formatTime';
 import getDeviceEventNames from './audio-player/helpers/utils/getDeviceEventNames';
 import { getRangeBox } from './audio-player/helpers/utils/getRangeBox';
@@ -12,6 +13,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     {
       autoPlay = false,
       className = '',
+      styleType = 'default',
       src,
       item = { premium: false, preview: null, title: null, album: { title: null } },
       subscriptionStatus = '',
@@ -51,6 +53,81 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     const [speakerIcon, setSpeakerIcon] = useState<string>(getVolumePath(volume));
     const [coefficient, setCoefficient] = useState<number>(0);
     const [hasError, setHasError] = useState<boolean>(false);
+
+    // Get the current style classes based on styleType
+    const getCurrentStyles = () => {
+      switch (styleType) {
+        case 'slider':
+          return sliderClass;
+        case 'minimal':
+          return minimal;
+        default:
+          return defaultClass;
+      }
+    };
+
+    const currentStyles = getCurrentStyles();
+
+    // Helper function to render SVG icons based on current style
+    const renderIcon = (iconType: 'play' | 'pause' | 'lock') => {
+      const iconConfig = currentStyles.rapPpButton[iconType];
+
+      if (iconType === 'play') {
+        if ('polygon' in iconConfig.svg) {
+          // Lucide style (slider/minimal)
+          return (
+            <svg {...iconConfig.svg.props}>
+              <polygon {...iconConfig.svg.polygon} />
+            </svg>
+          );
+        } else if ('path' in iconConfig.svg) {
+          // Default style with path
+          return (
+            <svg {...iconConfig.svg.props}>
+              <path {...iconConfig.svg.path} />
+            </svg>
+          );
+        }
+      } else if (iconType === 'pause') {
+        if ('line1' in iconConfig.svg) {
+          // Lucide style (slider)
+          return (
+            <svg {...iconConfig.svg.props}>
+              <circle {...iconConfig.svg.circle} />
+              <line {...iconConfig.svg.line1} />
+              <line {...iconConfig.svg.line2} />
+            </svg>
+          );
+        } else if ('path' in iconConfig.svg) {
+          // Default/minimal style with path
+          return (
+            <svg {...iconConfig.svg.props}>
+              <path {...iconConfig.svg.path} />
+            </svg>
+          );
+        }
+      } else if (iconType === 'lock') {
+        if ('circle' in iconConfig.svg && 'rect' in iconConfig.svg && 'path' in iconConfig.svg) {
+          // Lucide style (slider)
+          return (
+            <svg {...iconConfig.svg.props}>
+              <circle {...iconConfig.svg.circle} />
+              <rect {...iconConfig.svg.rect} />
+              <path {...iconConfig.svg.path} />
+            </svg>
+          );
+        } else if ('path' in iconConfig.svg) {
+          // Default/minimal style with path
+          return (
+            <svg {...iconConfig.svg.props}>
+              <path {...iconConfig.svg.path} />
+            </svg>
+          );
+        }
+      }
+
+      return null;
+    };
 
     useEffect(() => {
       handleReload();
@@ -430,51 +507,23 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
           ...style,
         }}
       >
-        {/* Container: transparent background (no dark rectangle fill) but keep border & rounded corners */}
-        <div
-          className="flex items-center gap-6 p-5 rounded-2xl"
-          style={{
-            background: 'transparent', // <-- removed dark filling
-            border: '1px solid rgba(255,255,255,0.06)', // subtle border to keep shape
-            alignItems: 'center',
-          }}
-        >
-          {/* Big round play/pause button (left-most) */}
-          <div
-            role="button"
-            onClick={() => togglePlay()}
-            className="flex-shrink-0"
-            style={{ cursor: 'pointer' }}
-          >
+        <div className={currentStyles.rapContainer.main}>
+          <div className={currentStyles.rapContainer.main2}>
+            {/* Play/Pause/Lock Button */}
             <div
-              style={{
-                width: 72,
-                height: 72,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(255,255,255,0.06)',
-                boxShadow: 'inset 0 -6px 20px rgba(0,0,0,0.35)',
-              }}
+              role="button"
+              onClick={() => togglePlay()}
+              className={currentStyles.rapPpButton.main}
+              style={{ cursor: 'pointer' }}
             >
-              {canPlay && !hasError ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="36"
-                  height="36"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                >
-                  {isPlaying ? (
-                    <>
-                      <rect x="6" y="5" width="3" height="14" rx="0.8" />
-                      <rect x="15" y="5" width="3" height="14" rx="0.8" />
-                    </>
-                  ) : (
-                    <path d="M5 3.868v16.264c0 .88.952 1.43 1.7.96l13.2-8.132c.7-.432.7-1.58 0-2.012L6.7 2.908C5.952 2.438 5 2.988 5 3.868z" />
-                  )}
-                </svg>
+              {subscriptionStatus !== 'active' && item.premium && !item.preview ? (
+                renderIcon('lock')
+              ) : canPlay && !hasError ? (
+                isPlaying ? (
+                  renderIcon('pause')
+                ) : (
+                  renderIcon('play')
+                )
               ) : hasError ? (
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
                   <path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5 0 .34-.03.67-.09.99l1.53.37c.08-.39.12-.79.12-1.36 0-3.87-3.13-7-7-7z" />
@@ -490,41 +539,25 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 />
               )}
             </div>
+
+            {/* Text Content */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className={currentStyles.rapTexts.album}>{leftTitle}</div>
+              <div className={currentStyles.rapTexts.title}>{leftSubtitle}</div>
+            </div>
           </div>
 
-          {/* MAIN: two invisible columns (left titles, right progress).
-              Left column made narrower so the right (line) column is larger/wider. */}
-          <div style={{ flex: 1, display: 'flex', gap: 20, minWidth: 0 }}>
-            {/* LEFT column: titles - reduced width to give more space to right column */}
-            <div style={{ flex: '0 0 28%', minWidth: 0 }}>
-              <div
-                style={{
-                  color: '#ffffff',
-                  fontSize: 24, // increased from 20 -> 24
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {leftTitle}
-              </div>
-              <div
-                style={{
-                  color: 'rgba(255,255,255,0.72)',
-                  fontSize: 16, // increased from 13 -> 16
-                  marginTop: 8,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {leftSubtitle}
-              </div>
-            </div>
-
-            {/* RIGHT column: progress line and times - larger flex so line is wider */}
-            <div style={{ flex: 1.2, minWidth: 0, display: 'flex', alignItems: 'center' }}>
+          {/* Progress Section - only show for default style */}
+          {styleType === 'default' && needControls && (
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '1rem',
+              }}
+            >
               <div
                 style={{
                   minWidth: 52,
@@ -545,7 +578,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 onClick={rewind}
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.12)',
-                  height: 8, // slightly thicker to match bigger fonts
+                  height: 8,
                   borderRadius: 9999,
                   position: 'relative',
                   cursor: 'pointer',
@@ -574,7 +607,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                     left: `${Math.max(0, Math.min(100, progressBarPercent || 0))}%`,
                     transform: 'translate(-50%, -50%)',
                     top: '50%',
-                    width: 14, // slightly larger pin for bigger UI
+                    width: 14,
                     height: 14,
                     borderRadius: '50%',
                     background: sliderColor,
@@ -598,95 +631,97 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 {totalTime !== '--:--' ? totalTime : '--:--'}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* small volume icon on the far right (optional) */}
-          <div style={{ marginLeft: 14, display: needVolumes ? 'block' : 'none' }}>
-            <div
-              role="button"
-              onClick={() => setVolumeOpen(v => !v)}
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 48,
-                height: 48,
-                borderRadius: 10,
-                background: 'rgba(255,255,255,0.03)',
-              }}
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill={volumeOpen ? sliderColor : '#cbd5e1'}
-              >
-                <path d={speakerIcon} />
-              </svg>
-            </div>
-
-            {volumeOpen && (
+          {/* Volume Controls */}
+          {needVolumes && (
+            <div style={{ marginLeft: 14 }}>
               <div
+                role="button"
+                onClick={() => setVolumeOpen(v => !v)}
                 style={{
-                  position: 'absolute',
-                  transform: 'translateY(-110%)',
-                  right: 24,
-                  background: 'rgba(13,13,15,0.85)',
-                  padding: 10,
-                  borderRadius: 8,
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: 10,
+                  background: 'rgba(255,255,255,0.03)',
                 }}
               >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill={volumeOpen ? sliderColor : '#cbd5e1'}
+                >
+                  <path d={speakerIcon} />
+                </svg>
+              </div>
+
+              {volumeOpen && (
                 <div
-                  className="rap-slider"
-                  data-direction="vertical"
-                  onClick={changeVolume}
-                  onMouseDown={handleVolumeDragging}
-                  onTouchStart={handleVolumeDragging}
                   style={{
-                    height: 100,
-                    width: 10,
-                    borderRadius: 99,
-                    background: 'rgba(255,255,255,0.08)',
-                    position: 'relative',
-                    overflow: 'hidden',
+                    position: 'absolute',
+                    transform: 'translateY(-110%)',
+                    right: 24,
+                    background: 'rgba(13,13,15,0.85)',
+                    padding: 10,
+                    borderRadius: 8,
+                    border: '1px solid rgba(255,255,255,0.06)',
                   }}
                 >
                   <div
-                    className="rap-progress"
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      ...getVolumeProgressStyle(),
-                      borderRadius: 99,
-                    }}
-                  />
-                  <div
-                    ref={volumePin}
-                    className="rap-pin"
-                    data-method="changeVolume"
+                    className="rap-slider"
+                    data-direction="vertical"
+                    onClick={changeVolume}
                     onMouseDown={handleVolumeDragging}
                     onTouchStart={handleVolumeDragging}
                     style={{
-                      position: 'absolute',
-                      bottom: `${volumeProgress}%`,
-                      left: '50%',
-                      transform: 'translate(-50%, 50%)',
-                      width: 14,
-                      height: 14,
-                      borderRadius: '50%',
-                      ...(sliderColor ? { background: sliderColor } : {}),
-                      border: '2px solid white',
-                      boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
+                      height: 100,
+                      width: 10,
+                      borderRadius: 99,
+                      background: 'rgba(255,255,255,0.08)',
+                      position: 'relative',
+                      overflow: 'hidden',
                     }}
-                  />
+                  >
+                    <div
+                      className="rap-progress"
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        ...getVolumeProgressStyle(),
+                        borderRadius: 99,
+                      }}
+                    />
+                    <div
+                      ref={volumePin}
+                      className="rap-pin"
+                      data-method="changeVolume"
+                      onMouseDown={handleVolumeDragging}
+                      onTouchStart={handleVolumeDragging}
+                      style={{
+                        position: 'absolute',
+                        bottom: `${volumeProgress}%`,
+                        left: '50%',
+                        transform: 'translate(-50%, 50%)',
+                        width: 14,
+                        height: 14,
+                        borderRadius: '50%',
+                        ...(sliderColor ? { background: sliderColor } : {}),
+                        border: '2px solid white',
+                        boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
 
         <audio

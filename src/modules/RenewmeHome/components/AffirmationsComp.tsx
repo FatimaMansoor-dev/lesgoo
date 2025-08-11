@@ -2,10 +2,12 @@
 import SubscriptionModal from 'modules/Subscription/components/SubscriptionModal';
 import React, { useState } from 'react';
 
-import { User } from 'src/types/user';
-import { TrackItem } from '../types';
-import Track from '../common/Track';
 import AuthenticatedRoute from 'shared/components/AuthenticatedRoute';
+
+import { User } from 'src/types/user';
+
+import Track from '../common/Track';
+import { TrackItem } from '../types';
 
 interface AffirmationsCompProps {
   data: TrackItem[];
@@ -31,19 +33,14 @@ const AffirmationsComp = ({ data, swiperRef, user }: AffirmationsCompProps) => {
 
           <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
             {data.map((item, index) => (
-              <div
-                key={index}
-                className="w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl p-6 sm:p-7 lg:p-8 bg-black/20 backdrop-blur-md shadow-xl border border-white/10 transition-all duration-200 ease-in-out"
-              >
-                <Track
-                  item={item}
-                  needControls={true}
-                  needVolumes={false}
-                  classNames="default"
-                  subscriptionStatus={user?.subscriptionStatus || ''}
-                  onLock={handleLock}
-                />
-              </div>
+              <Track
+                item={item}
+                needControls={true}
+                needVolumes={false}
+                classNames="default"
+                subscriptionStatus={user?.subscriptionStatus || ''}
+                onLock={handleLock}
+              />
             ))}
           </div>
         </div>

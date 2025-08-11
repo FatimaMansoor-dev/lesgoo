@@ -1,5 +1,3 @@
-// filepath: /home/muneeb/Projects/lesgoo/src/modules/RenewmeHome/common/audio-player/helpers/styles/audio.ts
-
 export const defaultClass = {
   rapContainer: {
     main: 'flex items-center justify-between rounded-xl sm:rounded-2xl bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[16px] sm:py-[24px] py-[18px]',
@@ -150,16 +148,21 @@ export const sliderClass = {
     title: 'text-xs sm:text-sm text-[#D6D6D6] leading-[16px] min-w-0 break-words',
   },
 };
+
 export const minimal = {
   rapContainer: {
+
     main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[16px] sm:py-[24px] py-[18px]',
     main2: 'flex items-center gap-3 sm:gap-4 flex-1 min-w-0',
+
   },
   rapPpButton: {
-    main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center border border-white/30',
+    // Play/pause button scales from tiny to large screens
+    main: 'flex justify-center items-center bg-transparent rounded-full border border-white/30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14',
     play: {
       svg: {
-        className: 'w-4 h-6',
+        // responsive svg sizing (Tailwind classes drive layout)
+        className: 'w-3 h-4 sm:w-4 sm:h-6 md:w-5 md:h-7 lg:w-6 lg:h-8',
         props: {
           width: '16',
           height: '16',
@@ -175,7 +178,7 @@ export const minimal = {
     },
     lock: {
       svg: {
-        className: 'w-4 h-4',
+        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
         props: {
           width: '16',
           height: '16',
@@ -189,7 +192,7 @@ export const minimal = {
     },
     pause: {
       svg: {
-        className: 'w-4 h-4',
+        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
         props: {
           width: '16',
           height: '16',
@@ -203,7 +206,9 @@ export const minimal = {
     },
   },
   rapTexts: {
+
     album: 'font-semibold text-xs sm:text-sm min-w-0 break-words leading-tight',
     title: 'text-xs sm:text-xs text-[#D6D6D6] min-w-0 break-words leading-tight',
+
   },
 };

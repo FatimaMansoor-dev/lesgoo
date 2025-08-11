@@ -59,7 +59,7 @@ export const defaultClass = {
     },
   },
   rapTexts: {
-    album: 'font-bold sm:text-2xl text-sm leading-[22px] sm:mb-5 mb-1',
+    album: 'font-bold sm:text-xl text-sm leading-[22px] sm:mb-5 mb-1',
     title: 'sm:text-xl text-sm text-[#D6D6D6] leading-[14px]',
   },
 };
@@ -147,5 +147,60 @@ export const sliderClass = {
   rapTexts: {
     album: 'font-bold text-base leading-[22px] mb-1',
     title: 'text-sm text-[#D6D6D6] leading-[14px]',
+  },
+};
+export const minimal = {
+  rapContainer: {
+    main: 'flex items-center rounded-xl bg-black/20 text-white px-4 py-3',
+    main2: 'flex items-center gap-4',
+  },
+  rapPpButton: {
+    main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center',
+    play: {
+      svg: {
+        className: 'w-4 h-4',
+        props: {
+          width: '16',
+          height: '16',
+          viewBox: '0 0 16 16',
+          fill: 'white',
+        },
+        path: {
+          d: 'M3 2L13 8L3 14V2Z',
+        },
+      },
+    },
+    lock: {
+      svg: {
+        className: 'w-4 h-4',
+        props: {
+          width: '16',
+          height: '16',
+          viewBox: '0 0 16 16',
+          fill: 'white',
+        },
+        path: {
+          d: 'M4 7V5a4 4 0 1 1 8 0v2M2 7h12v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7z',
+        },
+      },
+    },
+    pause: {
+      svg: {
+        className: 'w-4 h-4',
+        props: {
+          width: '16',
+          height: '16',
+          viewBox: '0 0 16 16',
+          fill: 'white',
+        },
+        path: {
+          d: 'M4 2h3v12H4zM9 2h3v12H9z',
+        },
+      },
+    },
+  },
+  rapTexts: {
+    album: 'font-semibold text-sm',
+    title: 'text-xs text-[#D6D6D6]',
   },
 };

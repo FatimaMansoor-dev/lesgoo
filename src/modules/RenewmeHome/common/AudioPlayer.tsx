@@ -1,11 +1,5 @@
 // AudioPlayer.tsx
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { AudioInterface, AudioPlayerRef } from './audio-player/components/core.interface';
 import { iconPaths } from './audio-player/helpers/icons/icons';
@@ -486,7 +480,14 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                   <path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5 0 .34-.03.67-.09.99l1.53.37c.08-.39.12-.79.12-1.36 0-3.87-3.13-7-7-7z" />
                 </svg>
               ) : (
-                <div style={{ width: 20, height: 20, borderRadius: 10, border: '3px solid rgba(255,255,255,0.12)' }} />
+                <div
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    border: '3px solid rgba(255,255,255,0.12)',
+                  }}
+                />
               )}
             </div>
           </div>
@@ -524,7 +525,15 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
 
             {/* RIGHT column: progress line and times - larger flex so line is wider */}
             <div style={{ flex: 1.2, minWidth: 0, display: 'flex', alignItems: 'center' }}>
-              <div style={{ minWidth: 52, textAlign: 'right', fontSize: 16, color: 'rgba(255,255,255,0.9)', marginRight: 14 }}>
+              <div
+                style={{
+                  minWidth: 52,
+                  textAlign: 'right',
+                  fontSize: 16,
+                  color: 'rgba(255,255,255,0.9)',
+                  marginRight: 14,
+                }}
+              >
                 {currentTime}
               </div>
 
@@ -577,7 +586,15 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 />
               </div>
 
-              <div style={{ minWidth: 52, textAlign: 'left', fontSize: 16, color: 'rgba(255,255,255,0.9)', marginLeft: 14 }}>
+              <div
+                style={{
+                  minWidth: 52,
+                  textAlign: 'left',
+                  fontSize: 16,
+                  color: 'rgba(255,255,255,0.9)',
+                  marginLeft: 14,
+                }}
+              >
                 {totalTime !== '--:--' ? totalTime : '--:--'}
               </div>
             </div>
@@ -587,7 +604,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
           <div style={{ marginLeft: 14, display: needVolumes ? 'block' : 'none' }}>
             <div
               role="button"
-              onClick={() => setVolumeOpen((v) => !v)}
+              onClick={() => setVolumeOpen(v => !v)}
               style={{
                 cursor: 'pointer',
                 display: 'flex',
@@ -599,7 +616,12 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 background: 'rgba(255,255,255,0.03)',
               }}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill={volumeOpen ? sliderColor : '#cbd5e1'}>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill={volumeOpen ? sliderColor : '#cbd5e1'}
+              >
                 <path d={speakerIcon} />
               </svg>
             </div>

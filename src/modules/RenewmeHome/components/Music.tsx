@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Play } from 'lucide-react';
+
 import {
   Carousel,
   type CarouselApi,
   CarouselContent,
   CarouselItem,
 } from 'src/components/ui/carousel';
-import HomeTitle from '../common/HomeTitle';
 import { fetchMusics } from 'src/services/meditation-albums-service';
-import { TrackItem } from '../types';
+
+import HomeTitle from '../common/HomeTitle';
+import Track from '../common/Track';
+import { MeditationAlbum, TrackItem } from '../types';
 
 const Music = () => {
   const [musicData, setMusicData] = useState<TrackItem[]>([]);
@@ -18,7 +20,15 @@ const Music = () => {
     async function fetchData() {
       const result = await fetchMusics('RenewMe', 1, 20);
       if (result.collection) {
-        setMusicData(result.collection as TrackItem[]);
+        setMusicData(
+          (result.collection as MeditationAlbum[]).map((item: MeditationAlbum) => ({
+            premium: item.premium || false,
+            preview: item.preview || null,
+            title: item.title,
+            album: { title: null },
+            url: item.preview || '',
+          }))
+        );
       }
     }
     fetchData();
@@ -48,10 +58,7 @@ const Music = () => {
         >
           <CarouselContent className="-ml-2 touch-none select-none">
             {chunkedData.map((group, groupIndex) => (
-              <CarouselItem
-                key={groupIndex}
-                className="pl-2 basis-full lg:basis-full"
-              >
+              <CarouselItem key={groupIndex} className="pl-2 basis-full lg:basis-full">
                 {/* Grid inside each slide */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {group.map((item, idx) => (
@@ -59,20 +66,12 @@ const Music = () => {
                       key={idx}
                       className="flex items-center gap-3 w-full h-20 backdrop-blur-lg bg-black/20 border border-white/20 rounded-2xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
                     >
-                      {/* Play button */}
-                      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition">
-                        <Play size={16} />
-                      </button>
-
-                      {/* Track title */}
-                      <div className="flex flex-col overflow-hidden">
-                        <h3 className="text-sm font-medium truncate">
-                          {item.title ?? 'Untitled'}
-                        </h3>
-                        <p className="text-xs text-white/50 truncate">
-                          {item.title ?? 'Untitled'}
-                        </p>
-                      </div>
+                      <Track
+                        item={item}
+                        needControls={false}
+                        needVolumes={false}
+                        classNames="minimal"
+                      />
                     </div>
                   ))}
                 </div>

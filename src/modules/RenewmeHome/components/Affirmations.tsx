@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Play } from 'lucide-react';
+
 import {
   Carousel,
   type CarouselApi,
@@ -7,8 +7,10 @@ import {
   CarouselItem,
 } from 'src/components/ui/carousel';
 import { fetchTracks } from 'src/services/meditation-albums-service';
+
 import HomeTitle from '../common/HomeTitle';
-import { TrackItem } from '../types';
+import Track from '../common/Track';
+import { MeditationAlbum, TrackItem } from '../types';
 
 const Affirmations = () => {
   const [affirmationsData, setAffirmationsData] = useState<TrackItem[]>([]);
@@ -19,7 +21,15 @@ const Affirmations = () => {
       try {
         const result = await fetchTracks('RenewMe', 'Affirmations', 1, 20);
         if (result.collection) {
-          setAffirmationsData(result.collection as TrackItem[]);
+          setAffirmationsData(
+            (result.collection as MeditationAlbum[]).map((item: MeditationAlbum) => ({
+              premium: item.premium || false,
+              preview: item.preview || null,
+              title: item.title,
+              album: { title: null },
+              url: item.preview || '',
+            }))
+          );
         }
       } catch (error) {
         // Optionally handle error state
@@ -46,27 +56,19 @@ const Affirmations = () => {
         >
           <CarouselContent className="-ml-2 touch-none select-none">
             {chunkedData.map((group, groupIndex) => (
-              <CarouselItem
-                key={groupIndex}
-                className="pl-2 basis-full lg:basis-full"
-              >
+              <CarouselItem key={groupIndex} className="pl-2 basis-full lg:basis-full">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {group.map((item, idx) => (
                     <div
                       key={idx}
                       className="flex items-center gap-3 w-full h-20 backdrop-blur-lg bg-black/20 border border-white/20 rounded-2xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
                     >
-                      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition">
-                        <Play size={16} />
-                      </button>
-                      <div className="flex flex-col overflow-hidden">
-                        <h3 className="text-sm font-medium truncate">
-                          {item.title ?? 'Untitled'}
-                        </h3>
-                        <p className="text-xs text-white/50 truncate">
-                          {item.title ?? 'Untitled'}
-                        </p>
-                      </div>
+                      <Track
+                        item={item}
+                        needControls={false}
+                        needVolumes={false}
+                        classNames="minimal"
+                      />
                     </div>
                   ))}
                 </div>

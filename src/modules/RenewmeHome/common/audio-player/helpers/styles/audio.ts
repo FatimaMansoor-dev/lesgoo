@@ -1,5 +1,3 @@
-// filepath: /home/muneeb/Projects/lesgoo/src/modules/RenewmeHome/common/audio-player/helpers/styles/audio.ts
-
 export const defaultClass = {
   rapContainer: {
     main: 'flex items-center justify-between rounded-xl sm:rounded-2xl bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[24px] sm:py-[24px] py-[21px]',
@@ -149,16 +147,21 @@ export const sliderClass = {
     title: 'text-sm text-[#D6D6D6] leading-[14px]',
   },
 };
+
 export const minimal = {
   rapContainer: {
-    main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[24px] sm:py-[24px] py-[21px]',
-    main2: 'flex items-center gap-4',
+    // Fully responsive container padding + rounding
+    main: 'flex items-center justify-between rounded-[12px] sm:rounded-[16px] md:rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-2 sm:py-3 md:py-4',
+    // gap scales across breakpoints
+    main2: 'flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6',
   },
   rapPpButton: {
-    main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center border border-white/30',
+    // Play/pause button scales from tiny to large screens
+    main: 'flex justify-center items-center bg-transparent rounded-full border border-white/30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14',
     play: {
       svg: {
-        className: 'w-4 h-6',
+        // responsive svg sizing (Tailwind classes drive layout)
+        className: 'w-3 h-4 sm:w-4 sm:h-6 md:w-5 md:h-7 lg:w-6 lg:h-8',
         props: {
           width: '16',
           height: '16',
@@ -174,7 +177,7 @@ export const minimal = {
     },
     lock: {
       svg: {
-        className: 'w-4 h-4',
+        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
         props: {
           width: '16',
           height: '16',
@@ -188,7 +191,7 @@ export const minimal = {
     },
     pause: {
       svg: {
-        className: 'w-4 h-4',
+        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
         props: {
           width: '16',
           height: '16',
@@ -202,7 +205,8 @@ export const minimal = {
     },
   },
   rapTexts: {
-    album: 'font-semibold text-sm',
-    title: 'text-xs text-[#D6D6D6]',
+    // make typography responsive — from compact on phones to larger on desktop
+    album: 'font-semibold text-xs sm:text-sm md:text-base lg:text-lg',
+    title: 'text-[10px] sm:text-xs md:text-sm lg:text-base text-[#D6D6D6]',
   },
 };

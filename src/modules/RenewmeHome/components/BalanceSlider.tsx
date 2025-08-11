@@ -22,6 +22,7 @@ interface BalanceSliderProps {
 const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
   const [balanceData, setBalanceData] = useState<MeditationAlbum[]>([]);
   const [api, setApi] = useState<CarouselApi | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,9 +30,31 @@ const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
       if ('collection' in result) {
         setBalanceData(result.collection);
       }
-      // Pagination can be added here if needed
     }
     fetchData();
+  }, []);
+
+  // detect mobile (match Tailwind 'sm' breakpoint: 640px)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 640px)');
+
+    const handle = (ev: MediaQueryListEvent | MediaQueryList) => {
+      setIsMobile(ev.matches);
+    };
+
+    // initial
+    handle(mq);
+
+    // listen
+    if (mq.addEventListener) {
+      mq.addEventListener('change', handle as any);
+      return () => mq.removeEventListener('change', handle as any);
+    } else {
+      // safari fallback
+      mq.addListener(handle as any);
+      return () => mq.removeListener(handle as any);
+    }
   }, []);
 
   return (
@@ -39,43 +62,49 @@ const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
       <HomeTitle text="Balance" link="user/renewme-home/balance" carouselApi={api} />
 
       <div className="mt-[39px]">
-       <Carousel
-  opts={{
-    align: 'start',
-    loop: false,
-    dragFree: false, // disable free dragging
-    watchDrag: false, // prevent any dragging
-  }}
-  setApi={setApi}
-  className="w-full overflow-hidden" // ensure no horizontal scroll bar appears
->
-  <CarouselContent className="-ml-2 pointer-events-none"> {/* prevent mouse/touch drag */}
-    {balanceData.map((data, index) => (
-      <CarouselItem
-        key={index}
-        className="pl-2 basis-1/2 md:basis-1/2 lg:basis-[calc(100%/3.5)] pointer-events-auto" // keep 3.5 items in a row
-      >
-        <Link href={`/${encodeURIComponent(data.slug)}`}>
-          <div className="relative w-full h-[270px]">
-            <Image
-              src={data.coverSmallLandscape}
-              alt={`Balance ${data.title}`}
-              loading="lazy"
-              fill
-              unoptimized
-              className="rounded-2xl object-cover"
-            />
-          </div>
-          <p className="mt-[15px] leading-[22px] xl:text-[20px] lg:text-[18px] md:text-[16px] text-[14px] text-white">
-            {data.title}
-          </p>
-        </Link>
-      </CarouselItem>
-    ))}
-  </CarouselContent>
-</Carousel>
-
-
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: false,
+            // keep dragFree false (we want normal snap behavior)
+            dragFree: false,
+            // watchDrag controls whether dragging/swiping is observed —
+            // enable it only on mobile so touch swipes work there
+            watchDrag: isMobile,
+          }}
+          setApi={setApi}
+          className="w-full overflow-hidden"
+        >
+          {/* when not mobile, block pointer events so desktop mouse can't drag */}
+          <CarouselContent
+            className={`-ml-2 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
+            // touch-action: allow horizontal panning on mobile to improve swipe UX
+            style={{ touchAction: isMobile ? 'pan-x' : 'auto' }}
+          >
+            {balanceData.map((data, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-2 basis-1/2 md:basis-1/2 lg:basis-[calc(100%/3.5)] pointer-events-auto"
+              >
+                <Link href={`/${encodeURIComponent(data.slug)}`}>
+                  <div className="relative w-full h-[270px]">
+                    <Image
+                      src={data.coverSmallLandscape}
+                      alt={`Balance ${data.title}`}
+                      loading="lazy"
+                      fill
+                      unoptimized
+                      className="rounded-2xl object-cover"
+                    />
+                  </div>
+                  <p className="mt-[15px] leading-[22px] xl:text-[20px] lg:text-[18px] md:text-[16px] text-[14px] text-white">
+                    {data.title}
+                  </p>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </div>
   );

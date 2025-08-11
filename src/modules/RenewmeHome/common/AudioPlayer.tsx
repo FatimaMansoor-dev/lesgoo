@@ -541,32 +541,20 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
             </div>
 
             {/* Text Content */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div className={currentStyles.rapTexts.album}>{leftTitle}</div>
-              <div className={currentStyles.rapTexts.title}>{leftSubtitle}</div>
+            <div className="flex-1 min-w-0">
+              <div className={`${currentStyles.rapTexts.album} break-words whitespace-normal`}>
+                {leftTitle}
+              </div>
+              <div className={`${currentStyles.rapTexts.title} break-words whitespace-normal`}>
+                {leftSubtitle}
+              </div>
             </div>
           </div>
 
           {/* Progress Section - only show for default style */}
           {styleType === 'default' && needControls && (
-            <div
-              style={{
-                flex: 1,
-                minWidth: 0,
-                display: 'flex',
-                alignItems: 'center',
-                marginLeft: '1rem',
-              }}
-            >
-              <div
-                style={{
-                  minWidth: 52,
-                  textAlign: 'right',
-                  fontSize: 16,
-                  color: 'rgba(255,255,255,0.9)',
-                  marginRight: 14,
-                }}
-              >
+            <div className="hidden sm:flex flex-1 min-w-0 items-center ml-4">
+              <div className="min-w-[52px] text-right text-sm sm:text-base text-white/90 mr-3">
                 {currentTime}
               </div>
 
@@ -619,15 +607,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 />
               </div>
 
-              <div
-                style={{
-                  minWidth: 52,
-                  textAlign: 'left',
-                  fontSize: 16,
-                  color: 'rgba(255,255,255,0.9)',
-                  marginLeft: 14,
-                }}
-              >
+              <div className="min-w-[52px] text-left text-sm sm:text-base text-white/90 ml-3">
                 {totalTime !== '--:--' ? totalTime : '--:--'}
               </div>
             </div>
@@ -635,7 +615,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
 
           {/* Volume Controls */}
           {needVolumes && (
-            <div style={{ marginLeft: 14 }}>
+            <div className="hidden sm:block ml-3">
               <div
                 role="button"
                 onClick={() => setVolumeOpen(v => !v)}

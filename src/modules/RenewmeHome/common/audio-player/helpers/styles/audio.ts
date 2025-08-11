@@ -2,8 +2,8 @@
 
 export const defaultClass = {
   rapContainer: {
-    main: 'flex items-center justify-between rounded-xl sm:rounded-2xl bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[24px] sm:py-[24px] py-[21px]',
-    main2: 'flex items-center gap-6',
+    main: 'flex items-center justify-between rounded-xl sm:rounded-2xl bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[16px] sm:py-[24px] py-[18px]',
+    main2: 'flex items-center gap-3 sm:gap-6 flex-1 min-w-0',
   },
   rapPpButton: {
     main: 'sm:min-w-[93px] min-w-[44px] sm:min-h-[93px] min-h-[44px] bg-transparent/15 rounded-full flex justify-center items-center text-center',
@@ -59,15 +59,15 @@ export const defaultClass = {
     },
   },
   rapTexts: {
-    album: 'font-bold sm:text-xl text-sm leading-[22px] mb-1', // Decreased the gap
-    title: 'sm:text-xl text-sm text-[#D6D6D6] leading-[14px]',
+    album: 'font-bold text-xs sm:text-xl leading-[18px] sm:leading-[22px] mb-1 min-w-0 break-words', // Decreased the gap
+    title: 'text-xs sm:text-xl text-[#D6D6D6] leading-[16px] sm:leading-[18px] min-w-0 break-words',
   },
 };
 
 export const sliderClass = {
   rapContainer: {
-    main: 'flex items-center justify-between rounded-xl bg-black/15 border border-white/20 backdrop-blur-md text-white px-6 py-5 w-full',
-    main2: 'flex items-center gap-6',
+    main: 'flex items-center justify-between rounded-xl bg-black/15 border border-white/20 backdrop-blur-md text-white px-4 sm:px-6 py-4 sm:py-5 w-full',
+    main2: 'flex items-center gap-3 sm:gap-6 flex-1 min-w-0',
   },
   rapPpButton: {
     main: 'p-2 bg-transparent/15 rounded-full',
@@ -145,14 +145,15 @@ export const sliderClass = {
     },
   },
   rapTexts: {
-    album: 'font-bold text-base leading-[22px] mb-1',
-    title: 'text-sm text-[#D6D6D6] leading-[14px]',
+    album:
+      'font-bold text-xs sm:text-base leading-[18px] sm:leading-[22px] mb-1 min-w-0 break-words',
+    title: 'text-xs sm:text-sm text-[#D6D6D6] leading-[16px] min-w-0 break-words',
   },
 };
 export const minimal = {
   rapContainer: {
-    main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[24px] sm:py-[24px] py-[21px]',
-    main2: 'flex items-center gap-4',
+    main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[16px] sm:py-[24px] py-[18px]',
+    main2: 'flex items-center gap-3 sm:gap-4 flex-1 min-w-0',
   },
   rapPpButton: {
     main: 'w-8 h-8 bg-transparent rounded-full flex justify-center items-center border border-white/30',
@@ -202,7 +203,7 @@ export const minimal = {
     },
   },
   rapTexts: {
-    album: 'font-semibold text-sm',
-    title: 'text-xs text-[#D6D6D6]',
+    album: 'font-semibold text-xs sm:text-sm min-w-0 break-words leading-tight',
+    title: 'text-xs sm:text-xs text-[#D6D6D6] min-w-0 break-words leading-tight',
   },
 };

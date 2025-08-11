@@ -62,17 +62,12 @@ const Confidence = () => {
                 {/* Grid inside each slide */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {group.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-3 w-full h-20 backdrop-blur-lg bg-black/20 border border-white/20 rounded-2xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
-                    >
-                      <Track
-                        item={item}
-                        needControls={false}
-                        needVolumes={false}
-                        classNames="minimal"
-                      />
-                    </div>
+                    <Track
+                      item={item}
+                      needControls={false}
+                      needVolumes={false}
+                      styleType="minimal"
+                    />
                   ))}
                 </div>
               </CarouselItem>

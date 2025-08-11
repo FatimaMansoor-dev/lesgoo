@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
-
-import { fetchTracks } from 'src/services/meditation-albums-service';
-
 import { Play } from 'lucide-react';
-
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from 'src/components/ui/carousel';
+import { fetchTracks } from 'src/services/meditation-albums-service';
+import HomeTitle from '../common/HomeTitle';
 import { TrackItem } from '../types';
 
 const Sleep = () => {
   const [sleepData, setSleepData] = useState<TrackItem[]>([]);
+  const [api, setApi] = useState<CarouselApi | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchTracks('RenewMe', 'Bedtime Stories', 1, 6);
+      const result = await fetchTracks('RenewMe', 'Bedtime Stories', 1, 20);
       if (result.collection) {
         setSleepData(result.collection as TrackItem[]);
       }
@@ -19,38 +24,63 @@ const Sleep = () => {
     fetchData();
   }, []);
 
+  // Group into chunks of 6 (3 cols × 2 rows)
+  const chunkedData = [];
+  for (let i = 0; i < sleepData.length; i += 6) {
+    chunkedData.push(sleepData.slice(i, i + 6));
+  }
+
   return (
-    <div className="mt-8 w-full">
+    <div className="gap-[39px] mt-8">
       {/* Section Header */}
-      <div className="flex justify-between items-center mb-4 px-1 sm:px-0">
-        <h2 className="text-xl sm:text-2xl font-semibold text-white">Sleep</h2>
-        <button className="text-sm sm:text-base text-white/70 hover:text-white transition">
-          See All
-        </button>
-      </div>
+      <HomeTitle text="Sleep" link="user/renewme-home/sleep" carouselApi={api} />
 
-      {/* Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-        {sleepData.map((item, index) => (
-          <div
-            key={index}
-            className="flex flex-col justify-center min-h-[100px] backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-4 text-white shadow-md hover:bg-white/15 transition cursor-pointer"
-          >
-            <div className="flex items-center gap-3">
-              {/* Play Button */}
-              <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition shrink-0">
-                <Play size={16} />
-              </button>
+      {/* Carousel */}
+      <div className="mt-[39px] overflow-hidden">
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: false,
+            dragFree: false,
+          }}
+          setApi={setApi}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 touch-none select-none">
+            {chunkedData.map((group, groupIndex) => (
+              <CarouselItem
+                key={groupIndex}
+                className="pl-2 basis-full lg:basis-full"
+              >
+                {/* Grid inside each slide */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {group.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 w-full h-20 backdrop-blur-lg bg-black/20 border border-white/20 rounded-2xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
+                    >
+                      {/* Play button */}
+                      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition">
+                        <Play size={16} />
+                      </button>
 
-              {/* Title & Subtitle */}
-              <div className="flex flex-col overflow-hidden">
-                <h3 className="text-sm sm:text-base font-medium truncate">
-                  {item.title ?? 'Untitled'}
-                </h3>
-              </div>
-            </div>
-          </div>
-        ))}
+                      {/* Track title */}
+                      <div className="flex flex-col overflow-hidden">
+                        <h3 className="text-sm font-medium truncate">
+                          {item.title ?? 'Untitled'}
+                        </h3>
+                        {/* Secondary heading: same title, smaller and lighter */}
+                        <p className="text-xs text-white/50 truncate">
+                          {item.title ?? 'Untitled'}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </div>
   );

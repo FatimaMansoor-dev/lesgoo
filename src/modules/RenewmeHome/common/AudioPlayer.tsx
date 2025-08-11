@@ -126,13 +126,23 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       },
     }));
 
+    // SAFER getTotalDuration: avoid calling buffered.end(0) which can throw or be NaN
     const getTotalDuration = () => {
-      if (!audioRef.current) {
-        return 0;
+      const a = audioRef.current;
+      if (!a) return 0;
+
+      const dur = a.duration;
+      if (dur && dur !== Infinity && !isNaN(dur)) return dur;
+
+      try {
+        if (a.buffered && a.buffered.length > 0) {
+          // use last buffered range end as a fallback
+          return a.buffered.end(a.buffered.length - 1) || 0;
+        }
+      } catch (e) {
+        // ignore
       }
-      return audioRef.current.duration !== Infinity
-        ? audioRef.current.duration
-        : audioRef.current.buffered.end(0);
+      return 0;
     };
 
     const handleCanPlay = () => {
@@ -209,9 +219,16 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
 
     const handleUpdateProgress = () => {
       if (audioRef.current) {
-        const current = audioRef.current.currentTime;
-        const percent = (current / getTotalDuration()) * 100;
-        setProgressBarPercent(percent);
+        const current = audioRef.current.currentTime || 0;
+        const total = getTotalDuration();
+        let percent = 0;
+        if (total && total > 0) {
+          percent = (current / total) * 100;
+        }
+        // guard against NaN / Infinity
+        if (!isFinite(percent) || isNaN(percent)) percent = 0;
+        const bounded = Math.max(0, Math.min(100, percent));
+        setProgressBarPercent(bounded);
         setCurrentTime(formatTime(current));
       }
     };
@@ -449,16 +466,16 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       return item.title;
     };
 
-    // const handlePremiumClick = (premium: boolean) => {
-    //   if (premium) {
-    //     onLock?.();
-    //   }
-    // };
-
-    const getProgressStyle = () => ({
-      width: `${progressBarPercent}%`,
-      ...(sliderColor ? { backgroundColor: sliderColor } : {}),
-    });
+    // Progress style: IMPORTANT — the visible fill will be white so it matches what you asked for
+    const getProgressStyle = () => {
+      const bounded = Math.max(0, Math.min(100, progressBarPercent || 0));
+      return {
+        width: `${bounded}%`,
+        backgroundColor: '#ffffff', // white fill
+        height: '100%',
+        borderRadius: '9999px',
+      } as React.CSSProperties;
+    };
 
     const getVolumeProgressStyle = () => ({
       height: `${volumeProgress}%`,
@@ -542,27 +559,31 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
           </div>
         </div>
 
-        <div className={`rap-controls ${needControls ? '' : '!hidden'}`}>
-          <span className="rap-current-time">{currentTime}</span>
+        <div className={`rap-controls flex items-center gap-3 ${needControls ? '' : '!hidden'}`}>
+          <span className="rap-current-time text-sm text-white/80 min-w-[44px] text-right">{currentTime}</span>
+
           <div
-            className="rap-slider"
+            className="rap-slider flex-1"
             data-direction="horizontal"
             onMouseDown={handleRewindDragging}
             onTouchStart={handleRewindDragging}
             onClick={rewind}
+            // make track visible: light translucent white background and a thinner height
+            style={{ backgroundColor: 'rgba(255,255,255,0.12)', height: '4px', borderRadius: 9999 }}
           >
             <div className="rap-progress" style={getProgressStyle()}>
               <div
                 ref={rewindPin}
                 className="rap-pin"
                 data-method="rewind"
-                style={getSliderPinStyle()}
+                style={{ ...getSliderPinStyle(), width: 10, height: 10, borderRadius: '50%', transform: 'translateY(-3px)' }}
                 onMouseDown={handleRewindDragging}
                 onTouchStart={handleRewindDragging}
               ></div>
             </div>
           </div>
-          {totalTime !== '--:--' && <span className="rap-total-time">{totalTime}</span>}
+
+          {totalTime !== '--:--' && <span className="rap-total-time text-sm text-white/80 min-w-[44px] text-left">{totalTime}</span>}
         </div>
 
         <div className={`rap-volume ${needVolumes ? '' : '!hidden'}`}>

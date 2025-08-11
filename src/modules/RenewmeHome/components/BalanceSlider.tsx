@@ -36,44 +36,46 @@ const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
 
   return (
     <div className="gap-[39px]">
-      <HomeTitle text="Balance" link="balance" carouselApi={api} />
+      <HomeTitle text="Balance" link="user/renewme-home/balance" carouselApi={api} />
 
       <div className="mt-[39px]">
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: false,
-          }}
-          plugins={[
-            Autoplay({
-              delay: 3000,
-            }),
-          ]}
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {balanceData.map((data, index) => (
-              <CarouselItem key={index} className="pl-4 basis-1/2 md:basis-1/2 lg:basis-1/3">
-                <Link href={`/${encodeURIComponent(data.slug)}`}>
-                  <div className="relative w-full aspect-[368/267]">
-                    <Image
-                      src={data.coverSmallLandscape}
-                      alt={`Balance ${data.title}`}
-                      loading="lazy"
-                      fill
-                      unoptimized
-                      className="rounded-2xl object-cover"
-                    />
-                  </div>
-                  <p className="mt-[25px] leading-[29px] xl:text-[24px] lg:text-[20px] md:text-[18px] text-[15px] text-white">
-                    {data.title}
-                  </p>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+       <Carousel
+  opts={{
+    align: 'start',
+    loop: false,
+    dragFree: false, // disable free dragging
+    watchDrag: false, // prevent any dragging
+  }}
+  setApi={setApi}
+  className="w-full overflow-hidden" // ensure no horizontal scroll bar appears
+>
+  <CarouselContent className="-ml-2 pointer-events-none"> {/* prevent mouse/touch drag */}
+    {balanceData.map((data, index) => (
+      <CarouselItem
+        key={index}
+        className="pl-2 basis-1/2 md:basis-1/2 lg:basis-[calc(100%/3.5)] pointer-events-auto" // keep 3.5 items in a row
+      >
+        <Link href={`/${encodeURIComponent(data.slug)}`}>
+          <div className="relative w-full h-[270px]">
+            <Image
+              src={data.coverSmallLandscape}
+              alt={`Balance ${data.title}`}
+              loading="lazy"
+              fill
+              unoptimized
+              className="rounded-2xl object-cover"
+            />
+          </div>
+          <p className="mt-[15px] leading-[22px] xl:text-[20px] lg:text-[18px] md:text-[16px] text-[14px] text-white">
+            {data.title}
+          </p>
+        </Link>
+      </CarouselItem>
+    ))}
+  </CarouselContent>
+</Carousel>
+
+
       </div>
     </div>
   );

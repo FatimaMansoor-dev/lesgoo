@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react';
+import { Play } from 'lucide-react';
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from 'src/components/ui/carousel';
+import HomeTitle from '../common/HomeTitle';
 import { fetchMusics } from 'src/services/meditation-albums-service';
 import { TrackItem } from '../types';
-import { Play } from 'lucide-react';
 
 const Music = () => {
   const [musicData, setMusicData] = useState<TrackItem[]>([]);
+  const [api, setApi] = useState<CarouselApi | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchMusics('RenewMe', 1, 6);
+      const result = await fetchMusics('RenewMe', 1, 20);
       if (result.collection) {
         setMusicData(result.collection as TrackItem[]);
       }
@@ -16,32 +24,62 @@ const Music = () => {
     fetchData();
   }, []);
 
+  // Group into chunks of 6 (3 cols × 2 rows)
+  const chunkedData = [];
+  for (let i = 0; i < musicData.length; i += 6) {
+    chunkedData.push(musicData.slice(i, i + 6));
+  }
+
   return (
-    <div className="mt-8">
+    <div className="gap-[39px] mt-8">
       {/* Section Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-white">Music</h2>
-        <button className="text-sm text-white/70 hover:text-white transition">See All</button>
-      </div>
+      <HomeTitle text="Music" link="user/renewme-home/music" carouselApi={api} />
 
-      {/* Fully responsive grid - 3 columns on large screens */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {musicData.slice(0, 6).map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-3 w-full backdrop-blur-md bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white shadow-md hover:bg-white/15 transition cursor-pointer"
-          >
-            {/* Play button */}
-            <button className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 transition">
-              <Play size={14} />
-            </button>
+      {/* Carousel */}
+      <div className="mt-[39px] overflow-hidden">
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: false,
+            dragFree: false,
+          }}
+          setApi={setApi}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 touch-none select-none">
+            {chunkedData.map((group, groupIndex) => (
+              <CarouselItem
+                key={groupIndex}
+                className="pl-2 basis-full lg:basis-full"
+              >
+                {/* Grid inside each slide */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {group.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 w-full h-20 backdrop-blur-lg bg-black/20 border border-white/20 rounded-2xl px-4 py-4 text-white shadow-md hover:bg-black/30 transition cursor-pointer"
+                    >
+                      {/* Play button */}
+                      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition">
+                        <Play size={16} />
+                      </button>
 
-            {/* Text */}
-            <div className="flex flex-col overflow-hidden">
-              <h3 className="text-xs font-medium truncate">{item.title}</h3>
-            </div>
-          </div>
-        ))}
+                      {/* Track title */}
+                      <div className="flex flex-col overflow-hidden">
+                        <h3 className="text-sm font-medium truncate">
+                          {item.title ?? 'Untitled'}
+                        </h3>
+                        <p className="text-xs text-white/50 truncate">
+                          {item.title ?? 'Untitled'}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </div>
   );

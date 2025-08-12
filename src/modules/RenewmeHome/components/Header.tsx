@@ -13,18 +13,55 @@ const Header = () => {
   return (
     <>
       <div className="lg:block hidden">
-        <div className="bg-[#00000024] sm:p-[29px_84px_29px_52px] flex justify-between items-center flex-wrap">
+        <div className="bg-[#00000044] sm:p-[29px_84px_29px_52px] flex justify-between items-center flex-wrap">
           <div>
-            <h2 className="text-[22px] text-white">RenewMe</h2>
-            <p className="text-lg text-[#FFFFFF8C] mt-[9px]">RenewMe</p>
-          </div>
-          <button className="bg-[#FFFFFF3D] h-[72px] text-white text-[24px] font-medium rounded-[70px] px-[36px]">
-            Use Mobile App
-          </button>
+  <h2
+    style={{
+      fontFamily: 'Urbanist, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      color: 'rgb(255, 255, 255)',
+      fontSize: '22px',
+      lineHeight: '33px',
+      margin: 0,
+    }}
+  >
+    RenewMe
+  </h2>
+
+  <p
+    style={{
+      fontFamily: 'Urbanist, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      color: 'rgba(255, 255, 255, 0.55)',
+      fontSize: '18px',
+      lineHeight: '28px',
+      marginTop: '9px',
+    }}
+  >
+    RenewMe
+  </p>
+</div>
+
+          <button
+  className="bg-[#FFFFFF3D] h-[72px] rounded-[70px] px-[36px]"
+  style={{
+    fontFamily: 'Urbanist, sans-serif',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    color: 'rgb(255, 255, 255)',
+    fontSize: '24px',
+    lineHeight: '36px',
+  }}
+>
+  Use Mobile App
+</button>
+
         </div>
       </div>
       <div className="lg:hidden block">
-        <div className="bg-[#00000024] px-[26px] py-[16px] flex justify-between items-center flex-wrap">
+        <div className="bg-[#00000044] px-[26px] py-[16px] flex justify-between items-center flex-wrap">
           <div>
             <Image
               src={'/assets/Renewme-home/svg/white-logo.svg'}

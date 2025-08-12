@@ -48,8 +48,9 @@ const ConfidenceComp = ({ data = [], swiperRef, user }: ConfidenceCompProps) => 
     <>
       <div className="mt-[32px] sm:mt-[48px] lg:mt-[54px] block w-full">
         <div className="flex flex-col items-start justify-center w-full max-w-7xl mx-auto px-4">
-          <h1 className="w-full text-left text-2xl sm:text-3xl font-medium tracking-normal text-white mb-6">
-            Confidence
+             <h1
+  className="text-[40px] font-semibold text-white leading-[48px] mb-8 ml-4 font-urbanist"
+>Confidence
           </h1>
 
           <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">

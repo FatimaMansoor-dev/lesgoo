@@ -178,9 +178,10 @@ const AwakeningBalance = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4 tracking-wide">
-                    Awakening Balance
-                  </h1>
+                  <h1 className="font-urbanist font-bold text-white text-[49px] leading-[34px] mb-4">
+  Awakening Balance
+</h1>
+
                   <div className="flex items-center gap-6 text-white/80">
                     <div className="flex items-center gap-2">
   <svg
@@ -199,9 +200,9 @@ const AwakeningBalance = () => {
       fill="none"
     />
   </svg>
-  <span className="text-sm font-medium">
-    {Math.floor(Number(albumData.totalDuration) / 60)} min{' '}
-    {Number(albumData.totalDuration) % 60} sec
+  <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">
+    {Math.floor(Number(albumData.totalDuration) / 60)}:{''}
+    {Number(albumData.totalDuration) % 60} min
   </span>
 </div>
                     <div className="flex items-center gap-2">
@@ -216,7 +217,7 @@ const AwakeningBalance = () => {
     <circle cx="12" cy="12" r="10" />
     <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
   </svg>
-  <span className="text-sm font-medium">{albumData.totalTracks} tracks</span>
+  <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">{albumData.totalTracks} tracks</span>
 </div>
 
                   </div>
@@ -226,13 +227,14 @@ const AwakeningBalance = () => {
                {/* Large play button */}
 <div className="flex-shrink-0 ml-8">
   <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-    <svg
-      className="w-8 h-8 sm:w-10 sm:h-10 text-black"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <polygon points="8,5 19,12 8,19" />
-    </svg>
+<svg
+  className="w-12 h-12 sm:w-14 sm:h-14 text-black"
+  viewBox="0 0 24 24"
+  fill="currentColor"
+>
+  <polygon points="7,4 20,12 7,20" />
+</svg>
+
   </button>
 </div>
 
@@ -243,11 +245,11 @@ const AwakeningBalance = () => {
             <div className="w-full mb-8">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-white/90">
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Author</span>
+                  <span className="text-lg font-mediue">Author</span>
                   <p className="text-lg font-medium">{albumData.author}</p>
                 </div>
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Narrator</span>
+                  <span className="text-lg font-medium">Narrator</span>
                   <p className="text-lg font-medium">{albumData.narrator}</p>
                 </div>
               </div>

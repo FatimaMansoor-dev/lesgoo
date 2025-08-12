@@ -35,12 +35,12 @@ const Balance = ({ carouselApi }: BalanceProps) => {
     <div className="gap-[39px]">
       <div className="w-full">
         {/* Heading with matching font style/family */}
-        <h2
-          className="text-[48px] font-bold text-white leading-[58px] mb-8 ml-4"
-          style={{ fontFamily: 'Poppins, sans-serif' }}
-        >
-          Balance
-        </h2>
+       <h2
+  className="text-[48px] font-bold text-white leading-[58px] mb-8 ml-4 font-urbanist"
+>
+  Balance
+</h2>
+
 
         {/* Image grid aligned with same margin as heading */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14 ml-4">
@@ -66,9 +66,20 @@ const Balance = ({ carouselApi }: BalanceProps) => {
                 </div>
               </div>
 
-              <p className="mt-4 text-left text-white text-xl md:text-2xl leading-snug">
+      <p
+  className="mt-4 text-left"
+  style={{
+    fontFamily: 'Urbanist, sans-serif',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    color: 'rgb(255, 255, 255)',
+    fontSize: '24px',
+    lineHeight: '29px',
+  }}
+>
   {data.title}
 </p>
+
 
             </Link>
           ))}

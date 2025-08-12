@@ -8,7 +8,16 @@ const HomeTitle = ({ text, link, carouselApi }: HomeTitleProps) => {
   return (
     <div className="flex justify-between items-center">
       {/* Left side: Title */}
-      <h2 className="xl:text-[32px] lg:text-[28px] md:text-[24px] text-[20px] font-medium text-white">
+      <h2
+        style={{
+          fontFamily: 'Urbanist, sans-serif',
+          fontWeight: 600,
+          fontStyle: 'normal',
+          color: 'rgb(255, 255, 255)',
+          fontSize: '28px',
+          lineHeight: '42px',
+        }}
+      >
         {text}
       </h2>
 
@@ -49,12 +58,35 @@ const HomeTitle = ({ text, link, carouselApi }: HomeTitleProps) => {
         </button>
 
         {/* See All */}
-        <Link href={`/${link}`}>
-          <div className="flex items-center text-white font-medium xl:text-[21] lg:text-[19px] md:text-[15px] text-[12px] ml-2 cursor-pointer hover:underline">
-            See All
-            <span className="ml-1 text-lg">{'>'}</span>
-          </div>
-        </Link>
+       {/* See All */}
+<Link href={`/${link}`}>
+  <div
+    className="flex items-center ml-2 cursor-pointer hover:underline"
+    style={{
+      fontFamily: 'Urbanist, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 500,
+      color: 'rgb(255, 255, 255)',
+      fontSize: '24px',
+      lineHeight: '36px',
+    }}
+  >
+    See All
+    <span className="ml-1 text-lg">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="xl:w-[20px] xl:h-[20px] lg:w-[18px] lg:h-[18px] md:w-[16px] md:h-[16px] w-[12px] h-[12px]"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="white"
+        strokeWidth="2"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </span>
+  </div>
+</Link>
+
       </div>
     </div>
   );

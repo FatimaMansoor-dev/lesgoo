@@ -32,10 +32,11 @@ const MasterYourDestiny = () => {
   const [albumData, setAlbumData] = useState<AlbumData | null>(null);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const { user } = useAuthStore();
+
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch the "Master Your Destiny" album - you might need to adjust the slug
+        // Fetch the "Master Your Destiny" album - adjust the slug as needed
         const result = await fetchAlbum('master-your-destiny');
         if (result && result.title) {
           setAlbumData({
@@ -47,7 +48,7 @@ const MasterYourDestiny = () => {
             tracks: (result.tracks || []).map((track: any, idx: number) => ({
               id: String(idx + 1),
               title: track.title,
-              url: track.track, // <-- Fix: use the 'track' property as 'url'
+              url: track.track, // use 'track' property as url
               premium: track.premium || false,
               preview: track.preview || null,
               duration: track.duration,
@@ -57,7 +58,7 @@ const MasterYourDestiny = () => {
         }
       } catch (error) {
         console.error('Error fetching album data:', error);
-        // Set default data if API fails
+        // Default data if API fails
         setAlbumData({
           title: 'Master Your Destiny',
           author: 'Dr. Lisa Palmer',
@@ -178,61 +179,71 @@ const MasterYourDestiny = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4 tracking-wide">
+                  <h1 className="font-urbanist font-bold text-white text-[49px] leading-[34px] mb-4">
                     Master Your Destiny
                   </h1>
+
                   <div className="flex items-center gap-6 text-white/80">
-                       <div className="flex items-center gap-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-white/80"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-  >
-    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-    <path
-      d="M12 6v6l4 2"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-  </svg>
-  <span className="text-sm font-medium">
-    {Math.floor(Number(albumData.totalDuration) / 60)} min{' '}
-    {Number(albumData.totalDuration) % 60} sec
-  </span>
-</div>
                     <div className="flex items-center gap-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-white"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
-  </svg>
-  <span className="text-sm font-medium">{albumData.totalTracks} tracks</span>
-</div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white/80"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          fill="none"
+                        />
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          fill="none"
+                        />
+                      </svg>
+                      <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">
+                        {Math.floor(Number(albumData.totalDuration) / 60)}:{''}
+                        {Number(albumData.totalDuration) % 60} min
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
+                      </svg>
+                      <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">
+                        {albumData.totalTracks} tracks
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Large play button */}
-<div className="flex-shrink-0 ml-8">
-  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-    <svg
-      className="w-8 h-8 sm:w-10 sm:h-10 text-black"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <polygon points="8,5 19,12 8,19" />
-    </svg>
-  </button>
-</div>
+                <div className="flex-shrink-0 ml-8">
+                  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+                    <svg
+                      className="w-12 h-12 sm:w-14 sm:h-14 text-black"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon points="7,4 20,12 7,20" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -240,19 +251,21 @@ const MasterYourDestiny = () => {
             <div className="w-full mb-8">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-white/90">
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Author</span>
+                  <span className="font-urbanist text-[20px] font-medium">Author</span>
                   <p className="text-lg font-medium">{albumData.author}</p>
                 </div>
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Narrator</span>
+                  <span className="font-urbanist text-[20px] font-medium">Narrator</span>
                   <p className="text-lg font-medium">{albumData.narrator}</p>
                 </div>
               </div>
             </div>
 
+            {/* Tracks List */}
             <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
               {albumData.tracks.map((item, index) => (
                 <Track
+                  key={item.id}
                   item={item}
                   needControls={true}
                   needVolumes={false}

@@ -13,7 +13,7 @@ export const defaultClass = {
           width: '33',
           height: '37',
           viewBox: '0 0 33 37',
-          fill: 'none',
+          fill: 'white',
         },
         path: {
           fill: 'white',
@@ -57,8 +57,9 @@ export const defaultClass = {
     },
   },
 rapTexts: {
-  album: 'font-bold text-lg sm:text-3xl leading-[30px] sm:leading-[34px] mb-1 min-w-0 break-words',
-  title: 'text-base sm:text-2xl text-[#D6D6D6] leading-[20px] sm:leading-[28px] min-w-0 break-words',
+  album: 'text-[32px] font-bold text-white leading-[22px] font-urbanist min-w-0 break-words mb-4',
+  title: 'text-[24px] font-normal text-[#D6D6D6] leading-[14px] font-urbanist min-w-0 break-words'
+
 },
 
 
@@ -78,7 +79,7 @@ export const sliderClass = {
           width: '20',
           height: '20',
           viewBox: '0 0 24 24',
-          fill: 'none',
+          fill: 'blue',
           stroke: 'currentColor',
           strokeWidth: '2',
           strokeLinecap: 'round' as const,
@@ -153,18 +154,16 @@ export const sliderClass = {
 
 export const minimal = {
   rapContainer: {
-
     main: 'flex items-center justify-between rounded-[19px] bg-black/15 border border-white/20 backdrop-blur-md text-white sm:px-[30px] px-[16px] sm:py-[24px] py-[18px]',
     main2: 'flex items-center gap-3 sm:gap-4 flex-1 min-w-0',
-
   },
   rapPpButton: {
-    // Play/pause button scales from tiny to large screens
-    main: 'flex justify-center items-center bg-transparent rounded-full border border-white/30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14',
+    // Smaller play/pause button with light white background
+    main: 'flex justify-center items-center bg-white/20 rounded-full border border-white/30 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10',
     play: {
       svg: {
-        // responsive svg sizing (Tailwind classes drive layout)
-        className: 'w-3 h-4 sm:w-4 sm:h-6 md:w-5 md:h-7 lg:w-6 lg:h-8',
+        // slightly smaller icons to fit new button size
+        className: 'w-2.5 h-3 sm:w-3 sm:h-4 md:w-3.5 md:h-5 lg:w-4 lg:h-6',
         props: {
           width: '16',
           height: '16',
@@ -180,7 +179,7 @@ export const minimal = {
     },
     lock: {
       svg: {
-        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
+        className: 'w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4',
         props: {
           width: '16',
           height: '16',
@@ -194,7 +193,7 @@ export const minimal = {
     },
     pause: {
       svg: {
-        className: 'w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6',
+        className: 'w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4',
         props: {
           width: '16',
           height: '16',
@@ -208,9 +207,7 @@ export const minimal = {
     },
   },
   rapTexts: {
-
     album: 'font-semibold text-xs sm:text-sm min-w-0 break-words leading-tight',
     title: 'text-xs sm:text-xs text-[#D6D6D6] min-w-0 break-words leading-tight',
-
   },
 };

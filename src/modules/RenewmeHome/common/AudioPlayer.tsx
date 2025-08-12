@@ -1,4 +1,3 @@
-// AudioPlayer.tsx
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { AudioInterface, AudioPlayerRef } from './audio-player/components/core.interface';
@@ -6,7 +5,9 @@ import { iconPaths } from './audio-player/helpers/icons/icons';
 import { defaultClass, minimal, sliderClass } from './audio-player/helpers/styles/audio';
 import { formatTime } from './audio-player/helpers/utils/formatTime';
 import getDeviceEventNames from './audio-player/helpers/utils/getDeviceEventNames';
+// replace with this
 import { getRangeBox } from './audio-player/helpers/utils/getRangeBox';
+
 
 export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
   (
@@ -24,7 +25,8 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       width = '100%',
       style = {},
       sliderColor = '#2EA6FF',
-      volume = 1,
+      // NOTE: volume prop now accepts both 0..1 (fraction) OR 0..100 (percent). Defaults to 100 (max).
+      volume = 1000,
       volumePlacement = 'top',
       hasKeyBindings = true,
       needControls = true,
@@ -43,6 +45,8 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     const rewindPin = useRef<HTMLDivElement | null>(null);
     const volumePin = useRef<HTMLDivElement | null>(null);
 
+    const seekingRef = useRef<boolean>(false);
+
     const [canPlay, setCanPlay] = useState<boolean>(preload === 'none');
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [progressBarPercent, setProgressBarPercent] = useState<number>(0);
@@ -50,7 +54,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     const [totalTime, setTotalTime] = useState<string>('--:--');
     const [volumeOpen, setVolumeOpen] = useState<boolean>(false);
     const [volumeProgress, setVolumeProgress] = useState<number>(100);
-    const [speakerIcon, setSpeakerIcon] = useState<string>(getVolumePath(volume));
+    const [speakerIcon, setSpeakerIcon] = useState<string>(getVolumePath(100));
     const [coefficient, setCoefficient] = useState<number>(0);
     const [hasError, setHasError] = useState<boolean>(false);
 
@@ -140,14 +144,20 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       }
     }, [audioRef.current?.duration]);
 
+    // Normalize the incoming volume prop (accepts 0..1 or 0..100)
+    function normalizeVolumeProp(v: number) {
+      if (isNaN(v)) return 1; // default full
+      if (v <= 1) return Math.max(0, Math.min(1, v)); // fraction
+      return Math.max(0, Math.min(100, v)) / 100; // percent -> fraction
+    }
+
     useEffect(() => {
-      if (!isNaN(volume)) {
-        const tempVol = volume > 100 ? 100 : volume < 0 ? 0 : volume;
-        setVolumeProgress(tempVol);
-        if (audioRef.current) {
-          audioRef.current.volume = tempVol / 100;
-        }
-      }
+      // apply initial volume
+      const normalized = normalizeVolumeProp(Number(volume));
+      setVolumeProgress(Math.round(normalized * 100));
+      setSpeakerIcon(getVolumePath(Math.round(normalized * 100)));
+      if (audioRef.current) audioRef.current.volume = normalized;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [volume]);
 
     useImperativeHandle(ref, () => ({
@@ -170,7 +180,9 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       },
       setVolume: (v: number) => {
         if (audioRef.current) {
-          audioRef.current.volume = Math.min(Math.max(0, v), 1);
+          const normalized = normalizeVolumeProp(v);
+          audioRef.current.volume = Math.min(Math.max(0, normalized), 1);
+          setVolumeProgress(Math.round(normalized * 100));
         }
       },
       toggleMute: () => {
@@ -213,6 +225,9 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
         setHasError(false);
         audioRef.current.src = src;
         audioRef.current.load();
+        // ensure volume after reload
+        const normalized = normalizeVolumeProp(Number(volume));
+        audioRef.current.volume = normalized;
       }
     };
 
@@ -260,7 +275,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
 
     const handleUpdateVolume = () => {
       if (audioRef.current) {
-        setVolumeProgress(audioRef.current.volume * 100);
+        setVolumeProgress(Math.round(audioRef.current.volume * 100));
         if (audioRef.current.volume >= 0.5) {
           setSpeakerIcon(iconPaths.fullVolume);
         } else if (audioRef.current.volume < 0.5 && audioRef.current.volume > 0.05) {
@@ -272,7 +287,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     };
 
     const handleUpdateProgress = () => {
-      if (audioRef.current) {
+      if (audioRef.current && !seekingRef.current) {
         const current = audioRef.current.currentTime || 0;
         const total = getTotalDuration();
         let percent = 0;
@@ -351,39 +366,86 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       const rect = rangeBox.getBoundingClientRect();
       const direction = rangeBox.dataset.direction;
       if (direction === 'horizontal') {
-        const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+        const clientX = 'touches' in event ? event.touches[0].clientX : (event as MouseEvent).clientX;
         if (clientX - rect.left < 0 || clientX - rect.right > 0) return false;
       } else {
         const min = rect.top;
         const max = min + rangeBox.offsetHeight;
-        const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
+        const clientY = 'touches' in event ? event.touches[0].clientY : (event as MouseEvent).clientY;
         if (clientY < min || clientY > max) return false;
       }
       return true;
     };
 
     function getCoefficient(
-      event: MouseEvent | TouchEvent | React.MouseEvent<HTMLDivElement, MouseEvent>
+      event: any // accept MouseEvent/TouchEvent/PointerEvent/React events
     ) {
       const slider = getRangeBox(event, currentlyDragged.current);
       const rect = slider.getBoundingClientRect();
       let K = 0;
 
       if (slider.dataset.direction === 'horizontal') {
-        const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+        const clientX = 'touches' in event
+          ? event.touches[0].clientX
+          : event.clientX ?? (event.clientX as number);
         const offsetX = clientX - rect.left;
         const width = slider.clientWidth;
         K = offsetX / width;
       } else if (slider.dataset.direction === 'vertical') {
-        const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
+        const clientY = 'touches' in event
+          ? event.touches[0].clientY
+          : event.clientY ?? (event.clientY as number);
         const height = slider.clientHeight;
         const offsetY = clientY - rect.top;
         K = 1 - offsetY / height;
       }
 
-      return K;
+      return Math.max(0, Math.min(1, K));
     }
 
+    // Seek while dragging/clicking on progress bar
+    const seekByPointer = (e: any) => {
+      // find the progress container
+      try {
+        const sliderEl = wrapperRef.current?.querySelector('[data-direction="horizontal"]') as HTMLElement | null;
+        if (!sliderEl || !audioRef.current) return;
+        const rect = sliderEl.getBoundingClientRect();
+        const clientX = (e?.touches && e.touches[0]) ? e.touches[0].clientX : (e.clientX ?? (e as MouseEvent).clientX);
+        let coef = (clientX - rect.left) / rect.width;
+        coef = Math.max(0, Math.min(1, coef));
+        const time = coef * getTotalDuration();
+        audioRef.current.currentTime = time;
+        setProgressBarPercent(coef * 100);
+        setCurrentTime(formatTime(time));
+      } catch (err) {
+        // ignore
+      }
+    };
+
+    const onPointerUp = (e?: any) => {
+      seekingRef.current = false;
+      window.removeEventListener('pointermove', seekByPointer as any);
+      window.removeEventListener('pointerup', onPointerUp as any);
+      currentlyDragged.current = null;
+    };
+
+    const handleProgressPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+      // begin seeking
+      seekingRef.current = true;
+      currentlyDragged.current = rewindPin.current; // for compatibility with other helpers
+      // capture pointer so we keep receiving move/up
+      try {
+        (e.target as Element).setPointerCapture?.((e as any).pointerId);
+      } catch (err) {
+        // ignore
+      }
+      // perform initial seek
+      seekByPointer(e);
+      window.addEventListener('pointermove', seekByPointer as any);
+      window.addEventListener('pointerup', onPointerUp as any);
+    };
+
+    // keep existing rewind function for clicks (legacy)
     const rewind = (event: MouseEvent | TouchEvent | React.MouseEvent<HTMLDivElement>) => {
       if (inRange(event) && audioRef.current) {
         if (preload === 'none' && !audioRef.current.duration) {
@@ -403,6 +465,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
     };
 
     const handleRewindDragging = () => {
+      // keep for finger compatibility — but pointer implementation handles dragging too
       currentlyDragged.current = rewindPin.current;
       const events = getDeviceEventNames();
       window.addEventListener(events.move, rewind, false);
@@ -476,11 +539,12 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
       const bounded = Math.max(0, Math.min(100, progressBarPercent || 0));
       return {
         width: `${bounded}%`,
-        backgroundColor: '#ffffff',
+        backgroundColor: sliderColor || '#2EA6FF', // played portion uses sliderColor prop
         height: '100%',
         borderRadius: 9999,
       } as React.CSSProperties;
     };
+
 
     const getVolumeProgressStyle = () => ({
       height: `${volumeProgress}%`,
@@ -508,7 +572,8 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
         }}
       >
         <div className={currentStyles.rapContainer.main}>
-          <div className={currentStyles.rapContainer.main2}>
+          {/* NOTE: progress block moved inside main2 so it starts right after text */}
+          <div className={`${currentStyles.rapContainer.main2} items-center`}>
             {/* Play/Pause/Lock Button */}
             <div
               role="button"
@@ -540,8 +605,8 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
               )}
             </div>
 
-            {/* Text Content */}
-            <div className="flex-1 min-w-0">
+            {/* Text Content - do NOT take full flex here so progress starts right after */}
+            <div className="min-w-0">
               <div className={`${currentStyles.rapTexts.album} break-words whitespace-normal`}>
                 {leftSubtitle}
               </div>
@@ -549,177 +614,181 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioInterface>(
                 {leftTitle}
               </div>
             </div>
-          </div>
 
-          {/* Progress Section - only show for default style */}
-          {styleType === 'default' && needControls && (
-            <div className="hidden sm:flex flex-1 min-w-0 items-center ml-4">
-              <div className="min-w-[52px] text-right text-sm sm:text-base text-white/90 mr-3">
-                {currentTime}
-              </div>
-
-              <div
-                className="flex-1"
-                data-direction="horizontal"
-                onMouseDown={handleRewindDragging}
-                onTouchStart={handleRewindDragging}
-                onClick={rewind}
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.12)',
-                  height: 8,
-                  borderRadius: 9999,
-                  position: 'relative',
-                  cursor: 'pointer',
-                }}
-              >
-                <div
-                  className="rap-progress"
-                  style={{
-                    ...getProgressStyle(),
-                    height: '100%',
-                    borderRadius: 9999,
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                  }}
-                />
+            {/* Progress Section (moved here) - this will start right after the text */}
+            {styleType === 'default' && needControls && (
+              <div className="hidden sm:flex items-center flex-1 min-w-0 ml-4">
+                <div className="min-w-[52px] text-right text-sm sm:text-base text-white/90 mr-3">
+                  {currentTime}
+                </div>
 
                 <div
-                  ref={rewindPin}
-                  className="rap-pin"
-                  data-method="rewind"
+                  className="flex-1"
+                  data-direction="horizontal"
+                  // pointer-based seeking: handles both click and drag smoothly
+                  onPointerDown={handleProgressPointerDown}
+                  // fallback for older codepaths
                   onMouseDown={handleRewindDragging}
                   onTouchStart={handleRewindDragging}
+                  onClick={(e) => rewind(e as any)}
                   style={{
-                    position: 'absolute',
-                    left: `${Math.max(0, Math.min(100, progressBarPercent || 0))}%`,
-                    transform: 'translate(-50%, -50%)',
-                    top: '50%',
-                    width: 14,
-                    height: 14,
-                    borderRadius: '50%',
-                    background: sliderColor,
-                    border: '2px solid white',
-                    boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
-                    transition: 'left 0.06s linear',
-                    pointerEvents: 'auto',
-                  }}
-                />
-              </div>
-
-              <div className="min-w-[52px] text-left text-sm sm:text-base text-white/90 ml-3">
-                {totalTime !== '--:--' ? totalTime : '--:--'}
-              </div>
-            </div>
-          )}
-
-          {/* Volume Controls */}
-          {needVolumes && (
-            <div className="hidden sm:block ml-3">
-              <div
-                role="button"
-                onClick={() => setVolumeOpen(v => !v)}
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 48,
-                  height: 48,
-                  borderRadius: 10,
-                  background: 'rgba(255,255,255,0.03)',
-                }}
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill={volumeOpen ? sliderColor : '#cbd5e1'}
-                >
-                  <path d={speakerIcon} />
-                </svg>
-              </div>
-
-              {volumeOpen && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    transform: 'translateY(-110%)',
-                    right: 24,
-                    background: 'rgba(13,13,15,0.85)',
-                    padding: 10,
-                    borderRadius: 8,
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    backgroundColor: '#ffffff',
+                    height: 4,
+                    borderRadius: 9999,
+                    position: 'relative',
+                    cursor: 'pointer',
                   }}
                 >
                   <div
-                    className="rap-slider"
-                    data-direction="vertical"
-                    onClick={changeVolume}
-                    onMouseDown={handleVolumeDragging}
-                    onTouchStart={handleVolumeDragging}
+                    className="rap-progress"
                     style={{
-                      height: 100,
-                      width: 10,
-                      borderRadius: 99,
-                      background: 'rgba(255,255,255,0.08)',
-                      position: 'relative',
-                      overflow: 'hidden',
+                      ...getProgressStyle(),
+                      height: '100%',
+                      borderRadius: 9999,
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                    }}
+                  />
+
+                  <div
+                    ref={rewindPin}
+                    className="rap-pin"
+                    data-method="rewind"
+                    onMouseDown={handleRewindDragging}
+                    onTouchStart={handleRewindDragging}
+                    style={{
+                      position: 'absolute',
+                      left: `${Math.max(0, Math.min(100, progressBarPercent || 0))}%`,
+                      transform: 'translate(-50%, -50%)',
+                      top: '50%',
+                      width: 14,
+                      height: 14,
+                      borderRadius: '50%',
+                      background: sliderColor,
+                      border: '2px solid white',
+                      boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
+                      // transition kept small — but when dragging the pointer code updates left directly
+                      transition: seekingRef.current ? 'none' : 'left 0.06s linear',
+                      pointerEvents: 'auto',
+                    }}
+                  />
+                </div>
+
+                <div className="min-w-[52px] text-left text-sm sm:text-base text-white/90 ml-3">
+                  {totalTime !== '--:--' ? totalTime : '--:--'}
+                </div>
+              </div>
+            )}
+
+            {/* Volume Controls */}
+            {needVolumes && (
+              <div className="hidden sm:block ml-3">
+                <div
+                  role="button"
+                  onClick={() => setVolumeOpen(v => !v)}
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 48,
+                    height: 48,
+                    borderRadius: 10,
+                    background: 'rgba(255,255,255,0.03)',
+                  }}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill={volumeOpen ? sliderColor : '#cbd5e1'}
+                  >
+                    <path d={speakerIcon} />
+                  </svg>
+                </div>
+
+                {volumeOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      transform: 'translateY(-110%)',
+                      right: 24,
+                      background: 'rgba(13,13,15,0.85)',
+                      padding: 10,
+                      borderRadius: 8,
+                      border: '1px solid rgba(255,255,255,0.06)',
                     }}
                   >
                     <div
-                      className="rap-progress"
-                      style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        ...getVolumeProgressStyle(),
-                        borderRadius: 99,
-                      }}
-                    />
-                    <div
-                      ref={volumePin}
-                      className="rap-pin"
-                      data-method="changeVolume"
+                      className="rap-slider"
+                      data-direction="vertical"
+                      onClick={changeVolume}
                       onMouseDown={handleVolumeDragging}
                       onTouchStart={handleVolumeDragging}
                       style={{
-                        position: 'absolute',
-                        bottom: `${volumeProgress}%`,
-                        left: '50%',
-                        transform: 'translate(-50%, 50%)',
-                        width: 14,
-                        height: 14,
-                        borderRadius: '50%',
-                        ...(sliderColor ? { background: sliderColor } : {}),
-                        border: '2px solid white',
-                        boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
+                        height: 100,
+                        width: 10,
+                        borderRadius: 99,
+                        background: 'rgba(255,255,255,0.08)',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}
-                    />
+                    >
+                      <div
+                        className="rap-progress"
+                        style={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          ...getVolumeProgressStyle(),
+                          borderRadius: 99,
+                        }}
+                      />
+                      <div
+                        ref={volumePin}
+                        className="rap-pin"
+                        data-method="changeVolume"
+                        onMouseDown={handleVolumeDragging}
+                        onTouchStart={handleVolumeDragging}
+                        style={{
+                          position: 'absolute',
+                          bottom: `${volumeProgress}%`,
+                          left: '50%',
+                          transform: 'translate(-50%, 50%)',
+                          width: 14,
+                          height: 14,
+                          borderRadius: '50%',
+                          ...(sliderColor ? { background: sliderColor } : {}),
+                          border: '2px solid white',
+                          boxShadow: '0 3px 10px rgba(0,0,0,0.45)',
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                )}
+              </div>
+            )}
+          </div>
 
-        <audio
-          loop={loop}
-          ref={audioRef}
-          preload={preload}
-          autoPlay={autoPlay}
-          onPlay={handleOnPlay}
-          onEnded={handleEnded}
-          onError={handleOnError}
-          onCanPlay={handleCanPlay}
-          onLoadedMetadata={handleLoadedMetaData}
-          onTimeUpdate={handleUpdateProgress}
-          onVolumeChange={handleUpdateVolume}
-          style={{ display: 'none' }}
-        >
-          <source src={src} type="audio/mpeg" />
-        </audio>
+          <audio
+            loop={loop}
+            ref={audioRef}
+            preload={preload}
+            autoPlay={autoPlay}
+            onPlay={handleOnPlay}
+            onEnded={handleEnded}
+            onError={handleOnError}
+            onCanPlay={handleCanPlay}
+            onLoadedMetadata={handleLoadedMetaData}
+            onTimeUpdate={handleUpdateProgress}
+            onVolumeChange={handleUpdateVolume}
+            style={{ display: 'none' }}
+          >
+            <source src={src} type="audio/mpeg" />
+          </audio>
+        </div>
       </div>
     );
   }

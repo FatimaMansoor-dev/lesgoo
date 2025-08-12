@@ -17,7 +17,10 @@ const RenewmeHome = () => {
       <div className="bg-[url(/assets/Renewme-home/home-bg.png)] bg-cover bg-center bg-fixed min-h-screen">
         <Layout>
           <div className="md:py-[88px] py-[27px] flex flex-col gap-[54px] text-[#ffffff] lg:pl-[44px]">
-            <div className="md:text-[48px] text-[24px] font-bold">Good Day</div>
+            <div className="font-urbanist font-bold text-white text-[48px] leading-[72px]">
+  Good Day
+</div>
+
             <div className="flex flex-col gap-[76px]">
               <BalanceSlider carouselApi={carouselApi || undefined} />
 

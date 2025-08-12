@@ -84,10 +84,13 @@ const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
             {balanceData.map((data, index) => (
               <CarouselItem
                 key={index}
-                className="pl-2 basis-1/2 md:basis-1/2 lg:basis-[calc(100%/3.5)] pointer-events-auto"
+                // added pr-3 to create space between items, kept pl-2 as before
+                className="pl-2 pr-3 basis-1/2 md:basis-1/2 lg:basis-[calc(100%/3.5)] pointer-events-auto"
               >
                 <Link href={`/${encodeURIComponent(data.slug)}`}>
-                  <div className="relative w-full h-[270px]">
+                  {/* reduced visual width slightly and centered (w-[95%] + mx-auto)
+                      this makes images a little narrower and creates space on each side */}
+                  <div className="relative w-[95%] mx-auto h-[270px]">
                     <Image
                       src={data.coverSmallLandscape}
                       alt={`Balance ${data.title}`}
@@ -97,7 +100,19 @@ const BalanceSlider = ({ carouselApi }: BalanceSliderProps) => {
                       className="rounded-2xl object-cover"
                     />
                   </div>
-                  <p className="mt-[15px] leading-[22px] xl:text-[20px] lg:text-[18px] md:text-[16px] text-[14px] text-white">
+                  {/* Title font changed to Urbanist 400 with exact size/line-height you gave */}
+                  <p
+                    style={{
+                      fontFamily: 'Urbanist, sans-serif',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      color: 'rgb(255, 255, 255)',
+                      fontSize: '24px',
+                      lineHeight: '29px',
+                      marginTop: '15px',
+                      // preserve text scaling behavior if needed (optional)
+                    }}
+                  >
                     {data.title}
                   </p>
                 </Link>

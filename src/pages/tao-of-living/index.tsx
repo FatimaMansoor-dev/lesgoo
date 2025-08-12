@@ -32,10 +32,10 @@ const TaoOfLiving = () => {
   const [albumData, setAlbumData] = useState<AlbumData | null>(null);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const { user } = useAuthStore();
+
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch the "Tao of Living" album - you might need to adjust the slug
         const result = await fetchAlbum('tao-of-living');
         if (result && result.title) {
           setAlbumData({
@@ -47,7 +47,7 @@ const TaoOfLiving = () => {
             tracks: (result.tracks || []).map((track: any, idx: number) => ({
               id: String(idx + 1),
               title: track.title,
-              url: track.track, // <-- Fix: use the 'track' property as 'url'
+              url: track.track,
               premium: track.premium || false,
               preview: track.preview || null,
               duration: track.duration,
@@ -57,7 +57,6 @@ const TaoOfLiving = () => {
         }
       } catch (error) {
         console.error('Error fetching album data:', error);
-        // Set default data if API fails
         setAlbumData({
           title: 'Tao of Living',
           author: 'Dr. Lisa Palmer',
@@ -165,11 +164,9 @@ const TaoOfLiving = () => {
     >
       <Layout>
         <div className="mt-[32px] sm:mt-[48px] lg:mt-[54px] block w-full">
-          {/* Wider outer container so cards can expand more on large screens */}
           <div className="flex flex-col items-start justify-center w-full max-w-7xl mx-auto px-4">
-            {/* Enhanced header with play button and scattered dots */}
+            {/* Decorative dots */}
             <div className="w-full relative mb-8">
-              {/* Decorative dots scattered around */}
               <div className="absolute top-0 left-1/4 w-2 h-2 bg-white rounded-full opacity-60"></div>
               <div className="absolute top-8 right-1/3 w-1.5 h-1.5 bg-white rounded-full opacity-40"></div>
               <div className="absolute top-16 left-3/4 w-2 h-2 bg-white rounded-full opacity-50"></div>
@@ -178,89 +175,102 @@ const TaoOfLiving = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4 tracking-wide">
-                    Tao of Living
+                  <h1 className="font-urbanist font-bold text-white text-[49px] leading-[34px] mb-4">
+                    {albumData.title}
                   </h1>
                   <div className="flex items-center gap-6 text-white/80">
-                       <div className="flex items-center gap-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-white/80"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-  >
-    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-    <path
-      d="M12 6v6l4 2"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-  </svg>
-  <span className="text-sm font-medium">
-    {Math.floor(Number(albumData.totalDuration) / 60)} min{' '}
-    {Number(albumData.totalDuration) % 60} sec
-  </span>
-</div>
                     <div className="flex items-center gap-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-white"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
-  </svg>
-  <span className="text-sm font-medium">{albumData.totalTracks} tracks</span>
-</div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white/80"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          fill="none"
+                        />
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          fill="none"
+                        />
+                      </svg>
+                      <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">
+                        {Math.floor(Number(albumData.totalDuration) / 60)}:{''}
+                        {Number(albumData.totalDuration) % 60} min
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="10,8 16,12 10,16" fill="white" stroke="none" />
+                      </svg>
+                      <span className="font-urbanist font-medium text-white text-[20px] leading-[24px]">
+                        {albumData.totalTracks} tracks
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Large play button */}
-<div className="flex-shrink-0 ml-8">
-  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-    <svg
-      className="w-8 h-8 sm:w-10 sm:h-10 text-black"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <polygon points="8,5 19,12 8,19" />
-    </svg>
-  </button>
-</div>
+                <div className="flex-shrink-0 ml-8">
+                  <button className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+                    <svg
+                      className="w-12 h-12 sm:w-14 sm:h-14 text-black"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon points="7,4 20,12 7,20" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Author and Narrator info */}
+            {/* Author and Narrator */}
             <div className="w-full mb-8">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-white/90">
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Author</span>
-                  <p className="text-lg font-medium">{albumData.author}</p>
+                  <span className="font-urbanist text-[14px] text-white/60 uppercase tracking-wide">
+                    Author
+                  </span>
+                  <p className="font-urbanist text-[20px] font-medium">{albumData.author}</p>
                 </div>
                 <div>
-                  <span className="text-sm text-white/60 uppercase tracking-wide">Narrator</span>
-                  <p className="text-lg font-medium">{albumData.narrator}</p>
+                  <span className="font-urbanist text-[14px] text-white/60 uppercase tracking-wide">
+                    Narrator
+                  </span>
+                  <p className="font-urbanist text-[20px] font-medium">{albumData.narrator}</p>
                 </div>
               </div>
             </div>
 
+            {/* Tracks */}
             <div className="w-full space-y-4 sm:space-y-5 lg:space-y-6">
-              {albumData.tracks.map((item, index) => (
+              {albumData.tracks.map((item) => (
                 <Track
+                  key={item.id}
                   item={item}
                   needControls={true}
                   needVolumes={false}
                   classNames="default"
                   subscriptionStatus={user?.subscriptionStatus || ''}
-                  onLock={() => {
-                    setIsSubscriptionModalOpen(true);
-                  }}
+                  onLock={() => setIsSubscriptionModalOpen(true)}
                 />
               ))}
             </div>
